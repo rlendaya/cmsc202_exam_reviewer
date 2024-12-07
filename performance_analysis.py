@@ -49,12 +49,18 @@ def performance_summary():
     else:
         percentage = 0 #This is to prevent math error
 
+    #Determine if pass or fail
+    if percentage >= 70:
+        status = "Pass"
+    else:
+        status = "Fail"
+
     #Print the summary
     print("\n==== Performance Summary ====")
     print(f"Total Questions: {total_questions}")
     print(f"Correct Answers: {correct_count}")
     print(f"Wrong Answers: {wrong_count}")
-    print(f"Score Percentage: {percentage:.2f}%")
+    print(f"Score Percentage: {percentage:.2f}% ({status})")
 
     # Show detailed results for each question answered
     print("\nDetailed Results:")

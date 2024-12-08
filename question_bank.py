@@ -3,9 +3,10 @@
 #Mark Lester
 #Jade Carl
 
-#Pseudocode (lets align with flowchart)
+#Question bank Pseudocode (lets align with flowchart)
 #1. Review Questions
 #2. Display Questions and answers
+#3. 
 
 #1. Take Exam
 #2. Output Questions ID, Subject, Type, Question
@@ -14,25 +15,64 @@
 #5. calculate score
 #6. End
 
+'''
+This question bank module will handle the following:
+
+1. Manage questions
+    - view question
+    - edit question
+    - delete question
+    - add question
+    
+2. Conduct review
+    - get review specifications from user
+        - user select topic
+        - user select question type
+        - user input number of desired questions
+    - display the questions
+    - gather answer from user
+    - check answer for correctness
+    - 
+
+'''
+
 #Comment: Team please check our question_bank feature. I need help in aligning this with our current flowchart. Feel free to adjust.
 
 import csv
 
+# os module for interoperability of file path with different OS
+import os
+
 class QuestionBank:
+    # function to handle file path and initialize variable for question list
     def __init__(self, file_path):
         self.file_path = file_path
         self.questions = []
 
+    # function to handle loading of questions from file and filtering based on the chosen topics and question type
+    
     def load_questions(self): #load question from csv file
         try:
             with open(self.file_path, 'r', encoding='ISO-8859-1') as file:
                 reader = csv.DictReader(file)
                 self.questions = [row for row in reader]
-            print(f"Loaded {len(self.questions)} questions successfully.")
+            # print(f"Loaded {len(self.questions)} questions successfully.")
         except Exception as e:
             print(f"An error occurred while loading questions: {e}")
 
+    # function to handle viewing of all questions
+    def view_question(self):
+        number_of_questions = len(self.questions)
+        print(f'There are {number_of_questions} questions in total!\n') 
+        # below will print header
+        print(f'{'Question Id':^15}{'Question Type':^20}{'Question':165}{'Answer':^10}\n')
+        for questions in self.questions:
+            print(f'{questions['id']:^15}{questions['type']:^20}{questions['question']:165}{questions['correct_answer']:^10}')
+
+
+    
     def review_questions(self):
+        
         if not self.questions:
             print("No questions available to review.")
             return
@@ -112,28 +152,66 @@ class QuestionBank:
         print(f"\nYour score: {score}/{len(self.questions)}")
 
 
-#Temporary function only for prototyping
+#function to get user input on review question filters and other options
+# Process flow based on defined flowchart in the user journey
+# 
+# Step 1: Select Question Option
+#       1.1 Questions Management
+#       1.2 Start Review
+# Step 1.1 Question Management Option
+#       1.1.1 View All Questions
+#       1.1.2 Edit Question
+#       1.1.3 Delete Question 
+#       1.1.4 Add Question 
+# 
+# 
+# 
+# 
+# 
+
 def main():
-    file_path = r"data\questionSamples.csv" #linking to the data folder
+    file_path = os.path.join("data",'questionSamples.csv') #linking to the data folder
     question_bank = QuestionBank(file_path)
     
     question_bank.load_questions()
 
     while True:
-        print("\nPrototype Menu:")
-        print("1. Review Questions")
-        print("2. Take Exam")
-        print("3. Exit")
-        
+        print("""
+
+Select number of chosen option below:
+
+(1) Question Management
+(2) Start Review
+
+""")
         choice = input("Enter your choice: ")
         
         if choice == '1':
-            question_bank.review_questions()
-        elif choice == '2':
-            question_bank.take_exam()
-        elif choice == '3':
-            print("Exiting...")
-            break
+            print('You are now in the Question Management. You can view, edit, delete, and add questions here.')
+            print('''
+
+Select options from below: 
+(1) View All Questions
+(2) Edit Question
+(3) Delete Question
+(4) Add Question
+
+
+''')
+            # if questionManagementchoice == '1':
+            question_bank.view_question()
+            
+        
+        
+        
+        
+        # if choice == '1':
+        #     question_bank.review_questions()
+        # elif choice == '2':
+        #     question_bank.take_exam()
+        # elif choice == '3':
+        #     print("Exiting...")
+        #     break
         else:
             print("Invalid choice. Please select a valid option.")
 

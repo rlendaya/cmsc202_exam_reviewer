@@ -208,6 +208,7 @@ Select number of chosen option below:
 
 (1) Question Management
 (2) Start Review
+(3) Exit Program
 """)
         choice = input("Enter your choice: ")
         
@@ -238,13 +239,12 @@ Select options from below:
         
         
         
-        # if choice == '1':
-        #     question_bank.review_questions()
-        # elif choice == '2':
-        #     question_bank.take_exam()
-        # elif choice == '3':
-        #     print("Exiting...")
-        #     break
+
+        elif choice == '2':
+            question_bank.take_exam()
+        elif choice == '3':
+            print("Exiting...")
+            break
         else:
             print("Invalid choice. Please select a valid option.")
 

@@ -56,6 +56,12 @@ def performance_summary():
         status = "Fail"
 
     #Print the summary
+    # print("\nSummary Table") #summary table comprised of Question number, user answer, correct answer, result, for each item
+    # print(f"{'Question Number':<15}{'User Answer':<25}{'Correct Answer':<25}{'Result':<10}")
+    # print("-" * 75)
+    # for questions, userAnswer, correctAnswer, results in #summary:
+        # print(f"{q_no:<15}{user_ans:<25}{correct_ans:<25}{res:<10}")
+    
     print("\n==== Performance Summary ====")
     print(f"Total Questions: {total_questions}")
     print(f"Correct Answers: {correct_count}")

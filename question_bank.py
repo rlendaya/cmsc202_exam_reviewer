@@ -49,8 +49,15 @@ class QuestionBank:
         self.file_path = file_path
         self.questions = []
 
-    # function to handle loading of questions from file and filtering based on the chosen topics and question type
+    # this function will handle cross-platform clearing of terminal for readability
+    def clear_terminal(self):
+        if os.name == 'nt':
+            os.system('cls')
+        else:
+            os.system('clear')
+        
     
+    # function to handle loading of questions from file
     def load_questions(self): #load question from csv file
         try:
             with open(self.file_path, 'r', encoding='ISO-8859-1') as file:
@@ -62,28 +69,46 @@ class QuestionBank:
 
     # function to handle viewing of all questions
     def view_question(self):
+        if not self.questions:
+            print("No questions available to review.")
+
         number_of_questions = len(self.questions)
         print(f'There are {number_of_questions} questions in total!\n') 
         # below will print header
-        print(f'{'Question Id':^15}{'Question Type':^20}{'Question':165}{'Answer':^10}\n')
+        print(f'{'Question Id':^15}{'Question Type':^20}{'Question':<165}\n')
         for questions in self.questions:
-            print(f'{questions['id']:^15}{questions['type']:^20}{questions['question']:165}{questions['correct_answer']:^10}')
+            print(f'{questions['id']:^15}{questions['type']:^20}{questions['question']:<165}')
+        
+       
+
+    # function to handle editing of questions
+    def edit_question(self):
+        self.clear_terminal()
+        print('You can now edit questions\n')
+        self.view_question()
+        
+        question_to_edit = input('\nSelect Question ID of the question you want to edit: ')
+        print('Here are the fields you can edit:')
+        
+        
+        
 
 
     
-    def review_questions(self):
-        
-        if not self.questions:
-            print("No questions available to review.")
-            return
-        
-        print("\nReviewing Questions:\n")
-        for question in self.questions:
-            print(f"ID: {question['id']}, Subject: {question['subject']}, Type: {question['type']}")
-            print(f"Question: {question['question']}")
-            for i in range(1, 5):
-                print(f"{i}. {question.get(f'answer_choice_{i}', '')}")
-            print(f"Correct Answer: {question['correct_answer']}\n")
+    # function below is superseded by the view question function
+        # def review_questions(self):
+            
+        #     if not self.questions:
+        #         print("No questions available to review.")
+        #         return
+            
+        #     print("\nReviewing Questions:\n")
+        #     for question in self.questions:
+        #         print(f"ID: {question['id']}, Subject: {question['subject']}, Type: {question['type']}")
+        #         print(f"Question: {question['question']}")
+        #         for i in range(1, 5):
+        #             print(f"{i}. {question.get(f'answer_choice_{i}', '')}")
+        #         print(f"Correct Answer: {question['correct_answer']}\n")
 
     def take_exam(self):
         if not self.questions:
@@ -175,31 +200,39 @@ def main():
     
     question_bank.load_questions()
 
+    question_bank.clear_terminal()
     while True:
-        print("""
+        print("""This is the Main Menu
 
 Select number of chosen option below:
 
 (1) Question Management
 (2) Start Review
-
 """)
         choice = input("Enter your choice: ")
         
         if choice == '1':
-            print('You are now in the Question Management. You can view, edit, delete, and add questions here.')
-            print('''
-
+            question_bank.clear_terminal()
+            print('You are now in the Question Management Menu. You can view, edit, delete, and add questions here.')
+            questionManagementchoice = input('''
 Select options from below: 
 (1) View All Questions
 (2) Edit Question
 (3) Delete Question
 (4) Add Question
+(5) Back to Main Menu
 
-
-''')
-            # if questionManagementchoice == '1':
-            question_bank.view_question()
+: ''')
+            if questionManagementchoice == '1':
+                question_bank.clear_terminal()
+                question_bank.view_question()
+                input('\nPress Enter to continue...')
+            elif questionManagementchoice == '2':
+                question_bank.edit_question()
+            elif questionManagementchoice == '5':
+                continue
+            else:
+                print('Invalid Option. ')
             
         
         

@@ -89,17 +89,17 @@ class QuestionBank:
         
         # print all the questions
         if output_code == '1':
-            print(f'{'No':^3}{'Subject':^10}{'Question Type':^20}{'Question':<165}\n')
+            print(f'{"No":^3}{"Subject":^10}{"Question Type":^20}{"Question":<165}\n')
             count = 0
             for questions in self.questions:
                 count += 1
-                print(f'{count:^3}{questions['subject']:^10}{questions['type']:^20}{questions['question']:<165}')
+                print(f'{count:^3}{questions["subject"]:^10}{questions["type"]:^20}{questions["question"]:<165}')
         else:
-            print(f'{'Id':^3}{'Subject':^10}{'Question Type':^20}{'Question':<165}\n')
+            print(f'{"Id":^3}{"Subject":^10}{"Question Type":^20}{"Question":<165}\n')
             count = 0
             for questions in self.questions:
                 count += 1
-                print(f'{questions['id']:^3}{questions['subject']:^10}{questions['type']:^20}{questions['question']:<165}')
+                print(f'{questions["id"]:^3}{questions["subject"]:^10}{questions["type"]:^20}{questions["question"]:<165}')
         
     # function to add questions to the question bank
     def add_question(self):

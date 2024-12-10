@@ -30,8 +30,8 @@ import os
 
 class QuestionBank:
     # function to handle file path and initialize variable for question list and question ids
-    def __init__(self, file_path):
-        self.file_path = file_path
+    def __init__(self):
+        self.file_path = os.path.join("data",'questionSamples.csv') #linking to the data folder
         self.questions = []
         self.headers = []
         self.question_ids = []
@@ -45,6 +45,7 @@ class QuestionBank:
 
     # function to handle loading of questions from file
     def load_questions(self):
+        
         try:
             with open(self.file_path, 'r', encoding='ISO-8859-1') as file:
                 reader = csv.DictReader(file)
@@ -79,6 +80,7 @@ class QuestionBank:
             print("No questions available to review.")
 
         number_of_questions = len(self.questions)
+        self.clear_terminal()
         print(f'There are {number_of_questions} questions in total!\n') 
         
         # print all the questions. There are types of output identified by an output code:
@@ -305,9 +307,40 @@ class QuestionBank:
                 break
             else:
                 print('Wrong input. Enter y or n only.')
+    
+    # function to handle menu options for question management
+    def question_management_menu(self):
+            self.clear_terminal()
+            print('You are now in the Question Management Menu. You can view, edit, delete, and add questions here.')
             
-                    
-                    
+            while True:
+                self.clear_terminal()
+                questionManagementchoice = input('''
+Select options from below: 
+(1) View All Questions
+(2) Edit Question
+(3) Delete Question
+(4) Add Question
+(5) Back to Main Menu
+
+: ''')
+                if questionManagementchoice == '1':
+                    self.clear_terminal
+                    self.view_question('1')
+                    input('\nPress Enter to go back to the previous menu')
+                elif questionManagementchoice == '2':
+                    self.edit_question()
+                    input('\nPress Enter to go back to the previous menu')
+                elif questionManagementchoice == '3':
+                    self.delete_question()
+                    input('\nPress Enter to go back to the previous menu')
+                elif questionManagementchoice == '4':
+                    self.add_question()
+                    input('\nPress Enter to go back to the previous menu')
+                elif questionManagementchoice == '5':
+                    break
+                else:
+                    print('Invalid Option. ')  
                     
                     
     def take_exam(self):
@@ -390,8 +423,8 @@ class QuestionBank:
 #       1.1.4 Add Question 
 
 def main():
-    file_path = os.path.join("data",'questionSamples.csv') #linking to the data folder
-    question_bank = QuestionBank(file_path)
+    
+    question_bank = QuestionBank()
     
     # load the questions
     question_bank.load_questions()
@@ -409,42 +442,7 @@ Select number of chosen option below:
         choice = input("Enter your choice: ")
         
         if choice == '1':
-            question_bank.clear_terminal()
-            print('You are now in the Question Management Menu. You can view, edit, delete, and add questions here.')
-            
-            while True:
-                question_bank.clear_terminal()
-                questionManagementchoice = input('''
-Select options from below: 
-(1) View All Questions
-(2) Edit Question
-(3) Delete Question
-(4) Add Question
-(5) Back to Main Menu
-
-: ''')
-                if questionManagementchoice == '1':
-                    question_bank.clear_terminal()
-                    question_bank.view_question('1')
-                    input('\nPress Enter to go back to the previous menu')
-                elif questionManagementchoice == '2':
-                    question_bank.edit_question()
-                    input()
-                elif questionManagementchoice == '3':
-                    question_bank.delete_question()
-                    input('\nPress Enter to go back to the previous menu')
-                elif questionManagementchoice == '4':
-                    question_bank.add_question()
-                    input('\nPress Enter to go back to the previous menu')
-                elif questionManagementchoice == '5':
-                    break
-                else:
-                    print('Invalid Option. ')
-            
-        
-        
-        
-        
+            question_bank.question_management_menu()
 
         elif choice == '2':
             question_bank.take_exam()

@@ -31,14 +31,14 @@ import random
 import os
 
 class QuestionBank:
-    # function to handle file path and initialize variable for question list
+    # function to handle file path and initialize variable for question list and question ids
     def __init__(self, file_path):
         self.file_path = file_path
         self.questions = []
         self.headers = []
         self.question_ids = []
 
-    # this function will handle cross-platform clearing of terminal for readability
+    # function to handle cross-platform clearing of terminal for readability
     def clear_terminal(self):
         if os.name == 'nt':
             os.system('cls')
@@ -46,19 +46,17 @@ class QuestionBank:
             os.system('clear')
 
     # function to handle loading of questions from file
-    def load_questions(self): #load question from csv file
+    def load_questions(self):
         try:
             with open(self.file_path, 'r', encoding='ISO-8859-1') as file:
                 reader = csv.DictReader(file)
                 self.questions = [row for row in reader]
                 self.headers = reader.fieldnames
                 self.question_ids = [question['id'] for question in self.questions]
-            # print(f"Loaded {len(self.questions)} questions successfully.")
         except Exception as e:
             print(f"An error occurred while loading questions: {e}")
 
-
-    # function to handle saving of question to file
+    # function to handle saving of questions to file
     def save_questions(self):
         try:
             with open(self.file_path, 'w') as file:
@@ -85,24 +83,27 @@ class QuestionBank:
         number_of_questions = len(self.questions)
         print(f'There are {number_of_questions} questions in total!\n') 
         
-        # below will print header
-        
-        # print all the questions
+        # print all the questions. There are types of output identified by an output code:
+        # Code '1': Will print a sequential number to distinguish each question for readability
+        # Code '2': will print the question_id which may not be sequential and is used to identify the question for other processing
         if output_code == '1':
+            # print question headers
             print(f'{"No":^3}{"Subject":^10}{"Question Type":^20}{"Question":<165}\n')
+            # counter variable for numbering of question on print. This is different from the unique question id
             count = 0
+            # loop through the self.questions list and then print.
             for questions in self.questions:
                 count += 1
                 print(f'{count:^3}{questions["subject"]:^10}{questions["type"]:^20}{questions["question"]:<165}')
         else:
+            # print question headers
             print(f'{"Id":^3}{"Subject":^10}{"Question Type":^20}{"Question":<165}\n')
-            count = 0
             for questions in self.questions:
-                count += 1
                 print(f'{questions["id"]:^3}{questions["subject"]:^10}{questions["type"]:^20}{questions["question"]:<165}')
         
     # function to add questions to the question bank
     def add_question(self):
+        self.clear_terminal()
         print('You can now add questions.\n')
         
         # initialize dictionary for the new question
@@ -131,9 +132,9 @@ class QuestionBank:
                 print('\nWrong input. Enter only the options provided.')
             
         # ask user to enter question
-        new_question['question'] = input('Enter question: ')
+        new_question['question'] = input('\nEnter question: ')
         
-        # ask user to enter choices if multiple choice
+        # ask user to enter choices if question type is multiple choice
         if question_type == '2':
             new_question['answer_choice_1'] = input('\nEnter answer_choice_1: ')
             new_question['answer_choice_2'] = input('Enter answer_choice_2: ')
@@ -145,7 +146,7 @@ class QuestionBank:
             while True:
                 correct_answer = input('\nEnter correct answer (T/F only): ')
                 if correct_answer in ['T','F','t','f']:
-                    new_question['correct_answer'] = correct_answer
+                    new_question['correct_answer'] = correct_answer.upper()
                     break
                 else:
                     print('\nWrong input. Enter T or F only.')
@@ -159,7 +160,8 @@ class QuestionBank:
                     print('\nWrong input. Enter 1 - 4 only.')
         
         # show user summary of the new question for review
-        print('Here is the new question:')
+        print('\nHere is the new question:')
+        # loop through the dictionary of the new question. Remove multiple choice inputs true/false type of question
         for key,value in new_question.items():
             if question_type == '1':
                 if 'answer_choice' not in key:
@@ -168,16 +170,16 @@ class QuestionBank:
                 print(f'{key}: {value}')
         
         # ask the user if they want they question to be saved
-        add_new_question_to_file = input('\nDo you wish to permanently add this question to the question bank? (Y/N)')
+        add_new_question_to_file = input('\nDo you wish to permanently add this question to the question bank? (y/n): ')
         
-        # if user confirms, append to current question list and save to file
+        # if user confirms, append to current question list and save to file. Otherwise, advice user that question is not saved
         if add_new_question_to_file.lower() == 'y':
             self.questions.append(new_question)
             self.save_questions()
             print(f'Changes are now saved to file {self.file_path}')
             self.load_questions()
         else:
-            print('\nData will not be saved. Thank you.')
+            print('\nQuestion will not be saved to file. Thank you.')
     
     
     # function to delete questions from the question bank
@@ -197,36 +199,33 @@ class QuestionBank:
                 print()
                 for key, value in self.questions[self.index_of_question].items():
                     print(f'{key}: {value}')
-                confirm_delete = input('\nAre you sure you want to delete the question above? (y|n) ')
                 
+                # confirm with user if they want to proceed with deletion of question
+                confirm_delete = input('\nAre you sure you want to delete the question above? (y|n) ')              
                 if confirm_delete.lower() == 'y':
                     del self.questions[self.index_of_question]
                     self.save_questions()
-                    print(f'Changes are now saved to file {self.file_path}')
+                    print(f'\nChanges are now saved to file {self.file_path}')
                     self.load_questions()
                     break
                 elif confirm_delete.lower() == 'n':
-                    print('Question is not deleted.')
+                    print('\nQuestion is not deleted.')
                     break
+            # exit the question delete module when user enters 'x'
             elif id_to_delete == 'x':
                 break
+            # error message when question id is not found in the question_ids list
             else: 
-                print('That Id does not exist. Input another Id.')
-            
-        
-        
-        
-                
-                
-            
-        
+                print('\nThat Question Id does not exist. Input another Id.')
+
+ 
     ''' Still a work in progress'''
     # function to handle editing of questions
     def edit_question(self):
         self.clear_terminal()
         
         # run the view question again to show all the questions
-        self.view_question()
+        self.view_question('2')
         
         # ask user for the id of the question they want to edit
         question_to_edit = input('\nEnter Question Id of the question you want to edit: ')
@@ -286,31 +285,6 @@ class QuestionBank:
                 if 'answer_choice' not in k:
                     print(k,v)
         
-        
-      
-        
-        
-        
-        
-        
-
-
-    
-    # function below is superseded by the view question function
-        # def review_questions(self):
-            
-        #     if not self.questions:
-        #         print("No questions available to review.")
-        #         return
-            
-        #     print("\nReviewing Questions:\n")
-        #     for question in self.questions:
-        #         print(f"ID: {question['id']}, Subject: {question['subject']}, Type: {question['type']}")
-        #         print(f"Question: {question['question']}")
-        #         for i in range(1, 5):
-        #             print(f"{i}. {question.get(f'answer_choice_{i}', '')}")
-        #         print(f"Correct Answer: {question['correct_answer']}\n")
-
     def take_exam(self):
         if not self.questions:
             print("No questions available for the exam. Please load the questions properly.")

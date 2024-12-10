@@ -22,8 +22,6 @@ This question bank module will handle the following:
     - check answer for correctness
 '''
 
-#Comment: Team please check our question_bank feature. I need help in aligning this with our current flowchart. Feel free to adjust.
-
 import csv
 import random
 
@@ -177,6 +175,7 @@ class QuestionBank:
             self.questions.append(new_question)
             self.save_questions()
             print(f'Changes are now saved to file {self.file_path}')
+            # reload question from file to ensure initialized list variables are updated
             self.load_questions()
         else:
             print('\nQuestion will not be saved to file. Thank you.')
@@ -229,62 +228,88 @@ class QuestionBank:
         
         # ask user for the id of the question they want to edit
         question_to_edit = input('\nEnter Question Id of the question you want to edit: ')
-        dict_to_edit, index_of_question = self.get_index_of_question(question_to_edit)
         
+        # call the get_index_of_question function
+        self.get_index_of_question(question_to_edit)
         
-        print('You can now edit questions here. Only editable fields will be shown.\n')
+        print('\nYou can now edit questions here. Only editable fields will be shown.\n')
         
-        # Ask user for the new values
-        # conditional statement for the values to be edited based on type of question
-        if self.questions[index_of_question]['type'] == 'true/false':
-            for key,value in dict_to_edit.items():
-                if 'answer_choice' not in key and key.lower() != 'id':
-                    print(f'\n{key}: {value}')
+        # Ask user for the new values. Conditional statement for the values to be edited based on type of question
+        # There are the only allowable values to be edited. Any field outside of these should be recreated as another question
+        # For question type: true/false:
+        # 1. Subject
+        # 2. Question
+        # 3. correct answer
+        # 
+        # For question type: multiple choice 
+        # 1. Subject
+        # 2. Question
+        # 3. answer_choices 1 - 4
+        # 4. correct_answer
+
+        # if question type is t/f, only show the subject, question, and correct answer
+        if self.questions[self.index_of_question]['type'] == 'true/false':
+            for key,value in self.dict_to_edit.items():
+                if 'answer_choice' not in key and key.lower() != 'id' and key.lower() != 'type':
+                    print(f'\nCurrent value:\n{key}: {value}')
                     
-                    if key == 'type':
-                        print('\nOnly the values below are allowed! Enter (number) of chosen value.')
-                        print('(1) true/false')
-                        print('(2) multiplechoice')
-                        
-                        chosenValue = input('\n: ')
-                        if chosenValue == '1':
-                            new_value = 'true/false'
-                        elif chosenValue == '2':
-                            new_value = 'multiplechoice'
-                            print('\nQuestion type has changed from true/false to multiplechoice. Enter choices below:')
-                            answer_choice_1 = input('answer_choice_1: ')
-                            self.questions[index_of_question]['answer_choice_1'] = answer_choice_1
-                            answer_choice_2 = input('answer_choice_2: ')
-                            self.questions[index_of_question]['answer_choice_2'] = answer_choice_2
-                            answer_choice_3 = input('answer_choice_3: ')
-                            self.questions[index_of_question]['answer_choice_3'] = answer_choice_3
-                            answer_choice_4 = input('answer_choice_4: ')
-                            self.questions[index_of_question]['answer_choice_4'] = answer_choice_4
-                        
+                    # if current key is correct answer, limit input to just t and f
+                    while True:
+                        new_value = input(f'Enter new value for {key}: ')
+                        if key != 'correct_answer':
+                            self.dict_to_edit[key] = new_value
+                            break
+                        elif key == 'correct_answer' and new_value.lower() in ['t','f']:
+                            self.dict_to_edit[key] = new_value.upper()
+                            break
                         else:
-                            print('Wrong Input. Skipping changes in this field')
-                    
-                    elif key == 'correct_answer':
-                        chosenValue = input('\nOnly \'T\' or \'F\' are allowed: ')
-                        
-                        if chosenValue.lower() == 't' or chosenValue.lower() == 'f':
-                            new_value = chosenValue
-                        else:
-                            print('Wrong Input!')
-                        
-                    else:
-                        new_value = input('Enter new value (press Enter to skip): ')
-                    
-                    if new_value != '':
-                        self.questions[index_of_question][key] = new_value
-                
-            print(self.questions[index_of_question])
-                        
+                            print('\nWrong Input. Enter t or f only')
+            
+            print('Here are the new values.\n')
+            for key,value in self.dict_to_edit.items():
+                if 'answer_choice' not in key and key.lower() != 'id' and key.lower() != 'type':
+                    print(f'{key}: {value}')
+        
+        # if question type is multiple choice, show edit ability for answer choice
         else:
-            for k,v in dict_to_edit.items():
-                if 'answer_choice' not in k:
-                    print(k,v)
+            for key,value in self.dict_to_edit.items():
+                if key.lower() != 'id' and key.lower() != 'type':
+                    print(f'\nCurrent value:\n{key}: {value}')
+                    
+                    # if key is correct answer, limit input to just 1 - 4
+                    while True:
+                        new_value = input(f'Enter new value for {key}: ')
+                        if key != 'correct_answer':
+                            self.dict_to_edit[key] = new_value
+                            break
+                        elif key == 'correct_answer' and new_value in ['1','2','3','4']:
+                            self.dict_to_edit[key] = new_value
+                            break
+                        else:
+                            print('\nWrong Input. Enter 1 - 4 only')
+            
+            print('Here are the new values.\n')
+            for key,value in self.dict_to_edit.items():
+                print(f'{key}: {value}')
         
+        while True:
+            save_new_values_to_dict = input('\nDo you with to save these new values? ( y|n only ) ')
+            if save_new_values_to_dict.lower() == 'y':
+                self.questions[self.index_of_question] = self.dict_to_edit
+                self.save_questions()
+                print(f'Changes are now saved to {self.file_path}')
+                self.load_questions()
+                break
+            elif save_new_values_to_dict == 'n':
+                print('Changes are not saved.')
+                break
+            else:
+                print('Wrong input. Enter y or n only.')
+            
+                    
+                    
+                    
+                    
     def take_exam(self):
         if not self.questions:
             print("No questions available for the exam. Please load the questions properly.")

@@ -35,7 +35,6 @@ class QuestionBank:
         self.questions = []
         self.headers = []
         self.question_ids = []
-        self.filtered_exam_questions = []
 
     # function to handle cross-platform clearing of terminal for readability
     def clear_terminal(self):
@@ -112,9 +111,9 @@ class QuestionBank:
         # initialize dictionary for the new question
         new_question = {'id':'','subject':'','type':'','question':'','answer_choice_1':'','answer_choice_2':'','answer_choice_3':'','answer_choice_4':'','correct_answer':''}
         
-        # generate unique id for the new question
+        # generate unique id for the new question. Max of 100 questions only
         while True:
-            new_question_id = random.randint(1,99)
+            new_question_id = random.randint(1,100)
             if new_question_id not in self.question_ids:
                 new_question['id'] = new_question_id
                 break
@@ -357,13 +356,13 @@ Select options from below:
     4. Display final score and store results in a dictionary
     '''
 
-    # function to filter the questions 
+    # function to filter the questions based on user feedback
     def review_questions_filtered(self):
         self.clear_terminal()
         
-        # initialize dictionary to be used for filtering 
+        # initialize dictionary and other variables to be used for filtering 
         self.subjects_available = {}
-        self.question_list = []
+        
         
          # store the unique subjects from the question bank to a dictionary
         subject_number = 0
@@ -374,7 +373,7 @@ Select options from below:
         
         # add the 'all' option as another key in the dictionary
         subject_number+=1
-        self.subjects_available[subject_number] = 'All subjects'
+        self.subjects_available[subject_number] = 'All Subjects'
          
         
         print('\nWelcome to the mock exam!')
@@ -389,45 +388,84 @@ Select options from below:
         
         # loop to get user input to choose subjects
         while True:
-            subject_chosen = input('\nEnter (number) of preferred topic. ')
+            subject_response = input('\nEnter (number) of preferred topic. ')
             # if user input is not in the available option, ask for another
             try:
-                if int(subject_chosen) in self.subjects_available:
+                if int(subject_response) in self.subjects_available:
+                    subject_chosen = self.subjects_available[int(subject_response)]
                     break
             except:
                 print('\nInvalid Input. Select from the available options only.')
                 
         # loop to get user input to choose question type
         while True:
-            question_type = input('\nSelect Preferred Question Type\n(1) True or False\n(2) Multiple Choice\n(3) All Question Types\n\nEnter (number) of preferred question type: ')
-            if question_type in ['1','2','3']:
+            self.clear_terminal()
+            question_response = input('\nSelect Preferred Question Type\n(1) True or False\n(2) Multiple Choice\n(3) All Question Types\n\nEnter (number) of preferred question type: ')
+            if question_response in ['1','2','3']:
+                if question_response == '1':
+                    question_type = 'true/false'
+                
+                elif question_response == '2':
+                    question_type = 'multiplechoice'
+                
+                else:
+                    question_type = 'All Question Types'
+                    
                 break
+            
             else:
                 print('\nInvalid Input. Select from the available options only.')
             
+        # get the initial list of questions based on user input for 2 filters. these filters will be applied sequentially. 
+        # After application of these filters, apply question count filter
         
+        if subject_chosen != 'All Subjects':
+            self.filtered_question_list = [question for question in self.questions if question['subject'] == subject_chosen]
+        else:
+            self.filtered_question_list = [question for question in self.questions]
+            
+        if question_type != 'All Question Types':
+            self.filtered_question_list = [question for question in self.filtered_question_list if question['type'] == question_type]
+        else:
+            self.filtered_question_list = [question for question in self.filtered_question_list]
         
-        
+        # filter for the users preferred number of question
+        max_question_count = len(self.filtered_question_list)
+        while True:
+            # user input must not exceed the max question available and should be >0
+            try:
+                question_count = input(f'\nHow many questions do you want to answer? Max of {max_question_count} question/s only: ')
+                # if the inputted question count is same as max question then keep the question list as is. Otherwise randomly select from the question ids
+                if int(question_count) == int(max_question_count):
+                    break
+                
+                # condition to randomize questions based on id 
+                elif int(question_count) > 0 and int(question_count) < max_question_count:
+                    self.filtered_question_list_ids = [question_list['id'] for question_list in self.filtered_question_list]
+                    
+                    # select question_ids randomly from the list
+                    self.filtered_question_list_ids = random.sample(self.filtered_question_list_ids, int(question_count))
+                    self.filtered_question_list = [question for question in self.filtered_question_list if question['id'] in self.filtered_question_list_ids]
+                    break
+                
+                else:
+                    print(f'\nInvalid Input. Select from 1 to {max_question_count} question/s only!!!!')
+                    
+            except Exception as e:
+                print(f'\nInvalid Input. Select from 1 to {max_question_count} question/s only. {e}')
         
 
-
-
-    # 
+    # function to conduct the exam review
     def take_exam(self):
+        # call the review questions filtering function
         self.review_questions_filtered()
-       
-        
-        
-
-        
-        
-        # commented out this code for now
-        ''''
+        input('Filters have been applied. Press Enter to start the exam reviewer...')
+        self.clear_terminal()
         
         print("\nStarting the exam...\n")
         score = 0
         
-        for question in self.questions:
+        for question in self.filtered_question_list:
             print(f"Question ID: {question['id']}")
             print(f"Subject: {question['subject']}")
             print(f"Type: {question['type']}")
@@ -483,10 +521,8 @@ Select options from below:
             if user_answer == correct_index:
                 score += 1
         
-        print(f"\nYour score: {score}/{len(self.questions)}")
-        
-        '''
-        # commented out this code for now
+        print(f"\nYour score: {score}/{len(self.filtered_question_list)}")
+        input(f'\nPress Enter to continue...')
 
 
 def main():

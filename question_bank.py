@@ -238,8 +238,8 @@ class QuestionBank:
         
         print('\nYou can now edit questions here. Only editable fields will be shown.\n')
         
-        # Ask user for the new values. Conditional statement for the values to be edited based on type of question
-        # There are the only allowable values to be edited. Any field outside of these should be recreated as another question
+        # Ask user for the new values. Below is the conditional statement for the values to be edited based on type of question
+        # These are the only allowable values to be edited. Any field outside of these should be recreated as another question
         # For question type: true/false:
         # 1. Subject
         # 2. Question
@@ -345,7 +345,7 @@ Select options from below:
                     print('Invalid Option. ')  
                     
     
-    # this is the function for the exam proper
+    # functions below are for the exam proper
     '''
     This will be the exam proper user journey
     1. Ask user for the exam filters
@@ -358,22 +358,67 @@ Select options from below:
     '''
 
     # function to filter the questions 
-    def review_questions_filtered(self,topic,type):
+    def review_questions_filtered(self):
+        self.clear_terminal()
+        
+        # initialize dictionary to be used for filtering 
+        self.subjects_available = {}
+        self.question_list = []
+        
+         # store the unique subjects from the question bank to a dictionary
+        subject_number = 0
+        for question in self.questions:
+            if question['subject'] not in self.subjects_available.values():
+                subject_number += 1
+                self.subjects_available[subject_number] = question['subject']
+        
+        # add the 'all' option as another key in the dictionary
+        subject_number+=1
+        self.subjects_available[subject_number] = 'All subjects'
+         
+        
+        print('\nWelcome to the mock exam!')
+        print('\nLet\'s setup some of the review settings before we start.\n ')
+        
+        # filter user input for available subjects and question type
+        print('Filter questions by topic. Only the subjects below are available:\n')
+        # display the available subject selection
+        for key,value in self.subjects_available.items():
+            print(f'({key}) {value}')
+            
+        
+        # loop to get user input to choose subjects
+        while True:
+            subject_chosen = input('\nEnter (number) of preferred topic. ')
+            # if user input is not in the available option, ask for another
+            try:
+                if int(subject_chosen) in self.subjects_available:
+                    break
+            except:
+                print('\nInvalid Input. Select from the available options only.')
+                
+        # loop to get user input to choose question type
+        while True:
+            question_type = input('\nSelect Preferred Question Type\n(1) True or False\n(2) Multiple Choice\n(3) All Question Types\n\nEnter (number) of preferred question type: ')
+            if question_type in ['1','2','3']:
+                break
+            else:
+                print('\nInvalid Input. Select from the available options only.')
+            
+        
+        
+        
         
 
 
 
     # 
     def take_exam(self):
-        if not self.questions:
-            print("No questions available for the exam. Please load the questions properly.")
-            return
+        self.review_questions_filtered()
+       
+        
+        
 
-        
-        
-        
-        
-        
         
         
         # commented out this code for now

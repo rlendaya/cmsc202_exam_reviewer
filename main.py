@@ -21,11 +21,10 @@ def main():
         print("5. Exit\n")
         choice = input("Enter your choice: ")
 
-        # run the question bank load question in the module
+        # run the question_bank module load_question function
         question_bank.load_questions()
         # run question_bank module when choice is 1
         if choice == "1":
-            question_bank.load_questions()
             # run the question management function
             question_bank.question_management_menu()
         elif choice == "2":

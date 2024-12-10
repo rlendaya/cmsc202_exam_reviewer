@@ -35,6 +35,7 @@ class QuestionBank:
         self.questions = []
         self.headers = []
         self.question_ids = []
+        self.filtered_exam_questions = []
 
     # function to handle cross-platform clearing of terminal for readability
     def clear_terminal(self):
@@ -42,6 +43,7 @@ class QuestionBank:
             os.system('cls')
         else:
             os.system('clear')
+
 
     # function to handle loading of questions from file
     def load_questions(self):
@@ -100,7 +102,8 @@ class QuestionBank:
             print(f'{"Id":^3}{"Subject":^10}{"Question Type":^20}{"Question":<165}\n')
             for questions in self.questions:
                 print(f'{questions["id"]:^3}{questions["subject"]:^10}{questions["type"]:^20}{questions["question"]:<165}')
-        
+
+ 
     # function to add questions to the question bank
     def add_question(self):
         self.clear_terminal()
@@ -219,8 +222,7 @@ class QuestionBank:
             else: 
                 print('\nThat Question Id does not exist. Input another Id.')
 
- 
-    ''' Still a work in progress'''
+
     # function to handle editing of questions
     def edit_question(self):
         self.clear_terminal()
@@ -342,11 +344,40 @@ Select options from below:
                 else:
                     print('Invalid Option. ')  
                     
-                    
+    
+    # this is the function for the exam proper
+    '''
+    This will be the exam proper user journey
+    1. Ask user for the exam filters
+        - topic
+        - question type
+        - number of desired questions
+    2. Take exam
+    3. Record output and correct answers
+    4. Display final score and store results in a dictionary
+    '''
+
+    # function to filter the questions 
+    def review_questions_filtered(self,topic,type):
+        
+
+
+
+    # 
     def take_exam(self):
         if not self.questions:
             print("No questions available for the exam. Please load the questions properly.")
             return
+
+        
+        
+        
+        
+        
+        
+        
+        # commented out this code for now
+        ''''
         
         print("\nStarting the exam...\n")
         score = 0
@@ -408,19 +439,10 @@ Select options from below:
                 score += 1
         
         print(f"\nYour score: {score}/{len(self.questions)}")
+        
+        '''
+        # commented out this code for now
 
-
-#function to get user input on review question filters and other options
-# Process flow based on defined flowchart in the user journey
-# 
-# Step 1: Select Question Option
-#       1.1 Questions Management
-#       1.2 Start Review
-# Step 1.1 Question Management Option
-#       1.1.1 View All Questions
-#       1.1.2 Edit Question
-#       1.1.3 Delete Question 
-#       1.1.4 Add Question 
 
 def main():
     
@@ -443,7 +465,6 @@ Select number of chosen option below:
         
         if choice == '1':
             question_bank.question_management_menu()
-
         elif choice == '2':
             question_bank.take_exam()
         elif choice == '3':

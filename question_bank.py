@@ -230,10 +230,17 @@ class QuestionBank:
         self.view_question('2')
         
         # ask user for the id of the question they want to edit
-        question_to_edit = input('\nEnter Question Id of the question you want to edit: ')
+        while True:
+            try: 
+                question_to_edit = input('\nEnter Question Id of the question you want to edit: ')
         
-        # call the get_index_of_question function
-        self.get_index_of_question(question_to_edit)
+                # call the get_index_of_question function
+                self.get_index_of_question(question_to_edit)
+                break
+            
+            except Exception as e:
+                print('\nInvalid Input. Enter the correct question ID...')
+                
         
         print('\nYou can now edit questions here. Only editable fields will be shown.\n')
         
@@ -459,7 +466,7 @@ Select options from below:
     def take_exam(self):
         # call the review questions filtering function
         self.review_questions_filtered()
-        input('Filters have been applied. Press Enter to start the exam reviewer...')
+        input('\nFilters have been applied. Press Enter to start the exam reviewer..\n')
         self.clear_terminal()
         
         print("\nStarting the exam...\n")

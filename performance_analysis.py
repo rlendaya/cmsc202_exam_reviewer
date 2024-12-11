@@ -54,12 +54,6 @@ class PerformanceAnalysis:
         else:
             status = "Fail"
 
-        #Print the summary
-        # print("\nSummary Table") #summary table comprised of Question number, user answer, correct answer, result, for each item
-        # print(f"{'Question Number':<15}{'User Answer':<25}{'Correct Answer':<25}{'Result':<10}")
-        # print("-" * 75)
-        # for questions, userAnswer, correctAnswer, results in #summary:
-        #     print(f"{q_no:<15}{user_ans:<25}{correct_ans:<25}{res:<10}")
         
         print("\n==== Performance Summary ====")
         print(f"Total Questions: {total_questions}")
@@ -67,6 +61,14 @@ class PerformanceAnalysis:
         print(f"Wrong Answers: {self.wrong_count}")
         print(f"Score Percentage: {percentage:.2f}% ({status})")
 
+        #Detailed exam results in tabular format
+        print("\nDetailed Exam Results:")
+        print("-" * 110)
+        print(f"{'Question':<60} {'Your Answer':<18} {'Correct Answer':<18} {'Result':<15}")
+        print("-" * 110)
+        for i, res in enumerate(self.results, 1):
+            print(f"{i}.{res['question']:<60}{res['user_answer']:<18}{res['correct_answer']:<18}{res['result']:<15}")
+        
         # Show detailed results for each question answered
         print("\nDetailed Results:")
         for i, res in enumerate(self.results, 1):

@@ -2,13 +2,13 @@
 from question_bank import QuestionBank
 # from answer_storage import AnswerStorage
 # from performance_analysis import PerformanceAnalysis
-# from customization import Customization
+from customization import Customization
 
 def main():
     question_bank = QuestionBank()
     # answer_storage = AnswerStorage()
     # performance_analysis = PerformanceAnalysis(answer_storage)
-    # customization = Customization(question_bank)
+    customization = Customization()
 
     while True:
         question_bank.clear_terminal()
@@ -32,8 +32,8 @@ def main():
             # question_bank.take_exam(answer_storage)
         # elif choice == "3":
         #     performance_analysis.display_performance()
-        # elif choice == "4":
-        #     customization.customize_questions()
+        elif choice == "4":
+            customization.customize_questions()
         elif choice == "5":
             print("Exiting... Goodbye!")
             break

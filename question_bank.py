@@ -35,6 +35,7 @@ class QuestionBank:
         self.questions = []
         self.headers = []
         self.question_ids = []
+        self.user_answers = {}
 
     # function to handle cross-platform clearing of terminal for readability
     def clear_terminal(self):
@@ -471,12 +472,16 @@ Select options from below:
         
         print("\nStarting the exam...\n")
         score = 0
+        question_count = 0
         
+        # Show the questions
         for question in self.filtered_question_list:
-            print(f"Question ID: {question['id']}")
+            self.clear_terminal()
+            question_count += 1
+            print(f"No: {question_count}")
             print(f"Subject: {question['subject']}")
-            print(f"Type: {question['type']}")
-            print(f"Question: {question['question']}")
+            print(f"Type: {question['type']}\n")
+            print(f"Question: {question['question']}\n")
             
             # Show answer choices for multiple choice questions
             if question['type'].lower() == 'multiplechoice':
@@ -506,28 +511,31 @@ Select options from below:
             
             # True/False Handler
             elif question['type'].lower() == 'true/false':
-                correct_answer = question['correct_answer']
-                print("1. True")
-                print("2. False")
-                
-                # Convert correct answer to an index based on 'True' or 'False'
-                correct_index = 0 if correct_answer.upper() == 'T' else 1
                 
                 # Get the user's response for true/false question
                 while True:
                     try:
-                        user_answer = int(input("Enter your answer (1 for True, 2 for False): ")) - 1
-                        if user_answer == 0 or user_answer == 1:
-                            break
+                        
+                        user_answer = input("Enter your answer (T for true, F for false): ")
+                        
+                        # check if user's answer is within allowable values
+                        if user_answer.lower() in ['t','f']:
+                        # Check Answer
+                            if user_answer.capitalize() == question['correct_answer']:
+                                score += 1
+                                print(f'\nGood job! You got the correct answer.')
+                                input('\nPress Enter to continue...')
+                                break
+                            else:
+                                print(f'\nYour answer is wrong. Correct answer is {question['correct_answer']}')
+                                input('\nPress Enter to continue...')
+                                break
                         else:
-                            print("Please enter 1 for True or 2 for False.")
+                            print("Invalid input. Please enter T or F only!")
                     except ValueError:
-                        print("Invalid input. Please enter 1 for True or 2 for False.")
-            
-            # Check Answer
-            if user_answer == correct_index:
-                score += 1
+                        print("Invalid input. Please enter T or F only!")
         
+            
         print(f"\nYour score: {score}/{len(self.filtered_question_list)}")
         input(f'\nPress Enter to continue...')
 

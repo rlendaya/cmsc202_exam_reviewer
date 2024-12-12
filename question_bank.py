@@ -552,11 +552,11 @@ Select options from below:
             self.user_answers_details_per_question['type'] = question['type']
             self.user_answers_details_per_question['correct_answer'] = question['correct_answer']
             self.user_answers_details_per_question['user_answer'] = user_answer
+            
+            # append the dictionary of this question to a list of exam answers.
             self.user_answers.append(self.user_answers_details_per_question)
             
-        print(type(self.user_answers))
-        
-        print(self.user_answers)
+      
         
             
         print(f"\nYour score: {score}/{len(self.filtered_question_list)}")

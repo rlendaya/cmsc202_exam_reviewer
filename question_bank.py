@@ -37,6 +37,8 @@ class QuestionBank:
         self.question_ids = []
         self.user_answers_details_per_question = {}
         self.user_answers = []
+        self.user_answers_details_per_question = {}
+        self.user_answers = []
 
     # function to handle cross-platform clearing of terminal for readability
     def clear_terminal(self):
@@ -474,13 +476,20 @@ Select options from below:
         print("\nStarting the exam...\n")
         score = 0
         question_count = 0
+        question_count = 0
         
+        # Show the questions
         # Show the questions
         for question in self.filtered_question_list:
             self.clear_terminal()
             question_count += 1
             print(f"No: {question_count}")
+            self.clear_terminal()
+            question_count += 1
+            print(f"No: {question_count}")
             print(f"Subject: {question['subject']}")
+            print(f"Type: {question['type']}\n")
+            print(f"Question: {question['question']}\n")
             print(f"Type: {question['type']}\n")
             print(f"Question: {question['question']}\n")
             
@@ -489,6 +498,7 @@ Select options from below:
                 for i in range(1, 5):
                     print(f"{i}. {question[f'answer_choice_{i}']}")
                 
+                '''
                 '''
                 # Handle correct answer being a letter or number for multiple choice questions
                 correct_answer = question["correct_answer"]
@@ -501,10 +511,23 @@ Select options from below:
                     correct_index = choices.index(correct_answer)  # Find the correct answer index
                 '''
                 
+                '''
+                
                 
                 # Get the user's response
                 while True:
                     try:
+                        user_answer = int(input(f"\nEnter your answer (1-4): "))
+                        if 1 <= user_answer <= 4:
+                            if user_answer == int(question['correct_answer']):
+                                score += 1
+                                print(f'\nGood job! You got the correct answer.')
+                                input('\nPress Enter to continue...')
+                                break
+                            else:
+                                print(f'\nYour answer is wrong. Correct answer is {question['correct_answer']}')
+                                input('\nPress Enter to continue...')
+                                break
                         user_answer = int(input(f"\nEnter your answer (1-4): "))
                         if 1 <= user_answer <= 4:
                             if user_answer == int(question['correct_answer']):
@@ -541,7 +564,22 @@ Select options from below:
                                 print(f'\nYour answer is wrong. Correct answer is {question['correct_answer']}')
                                 input('\nPress Enter to continue...')
                                 break
+                        # get user input for the correct answer
+                        user_answer = input("Enter your answer (T for true, F for false): ")
+                        # check if user's answer is within allowable values
+                        if user_answer.lower() in ['t','f']:
+                        # Check Answer
+                            if user_answer.capitalize() == question['correct_answer']:
+                                score += 1
+                                print(f'\nGood job! You got the correct answer.')
+                                input('\nPress Enter to continue...')
+                                break
+                            else:
+                                print(f'\nYour answer is wrong. Correct answer is {question['correct_answer']}')
+                                input('\nPress Enter to continue...')
+                                break
                         else:
+                            print("Invalid input. Please enter T or F only!")
                             print("Invalid input. Please enter T or F only!")
                     except ValueError:
                         print("Invalid input. Please enter T or F only!")

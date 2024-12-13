@@ -3,6 +3,7 @@ from question_bank import QuestionBank
 # from answer_storage import AnswerStorage
 from performance_analysis import PerformanceAnalysis
 from customization import Customization
+import answer_storage
 import utils
 
 def main():
@@ -20,7 +21,8 @@ def main():
         print("2. Take Exam")
         print("3. View Performance")
         print("4. Customize Settings")
-        print("5. Exit\n")
+        print("5. Review Previous Study Sessions")
+        print("6. Exit\n")
         choice = input("Enter your choice: ")
 
         # run the question_bank module load_question function
@@ -45,6 +47,8 @@ def main():
         elif choice == "4":
             customization.customize_questions()
         elif choice == "5":
+            answer_storage.retrieve_answers("answers.txt")
+        elif choice == "6":
             print("Exiting... Goodbye!")
             break
         

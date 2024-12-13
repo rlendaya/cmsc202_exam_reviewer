@@ -24,6 +24,7 @@ This question bank module will handle the following:
 
 import csv
 import random
+import utils
 
 # os module for interoperability of file path with different OS
 import os
@@ -40,17 +41,8 @@ class QuestionBank:
         self.user_answers_details_per_question = {}
         self.user_answers = []
 
-    # function to handle cross-platform clearing of terminal for readability
-    def clear_terminal(self):
-        if os.name == 'nt':
-            os.system('cls')
-        else:
-            os.system('clear')
-
-
     # function to handle loading of questions from file
     def load_questions(self):
-        
         try:
             with open(self.file_path, 'r', encoding='ISO-8859-1') as file:
                 reader = csv.DictReader(file)
@@ -85,7 +77,7 @@ class QuestionBank:
             print("No questions available to review.")
 
         number_of_questions = len(self.questions)
-        self.clear_terminal()
+        utils.clear_terminal()
         print(f'There are {number_of_questions} questions in total!\n') 
         
         # print all the questions. There are types of output identified by an output code:
@@ -109,7 +101,7 @@ class QuestionBank:
  
     # function to add questions to the question bank
     def add_question(self):
-        self.clear_terminal()
+        utils.clear_terminal()
         print('You can now add questions.\n')
         
         # initialize dictionary for the new question
@@ -191,7 +183,7 @@ class QuestionBank:
     
     # function to delete questions from the question bank
     def delete_question(self):
-        self.clear_terminal()
+        utils.clear_terminal()
         print('You can now delete questions.')
         
         # show the list of all questions with code 2
@@ -228,7 +220,7 @@ class QuestionBank:
 
     # function to handle editing of questions
     def edit_question(self):
-        self.clear_terminal()
+        utils.clear_terminal()
         
         # run the view question again to show all the questions
         self.view_question('2')
@@ -322,11 +314,11 @@ class QuestionBank:
     
     # function to handle menu options for question management
     def question_management_menu(self):
-            self.clear_terminal()
+            utils.clear_terminal()
             print('You are now in the Question Management Menu. You can view, edit, delete, and add questions here.')
             
             while True:
-                self.clear_terminal()
+                utils.clear_terminal()
                 questionManagementchoice = input('''
 Select options from below: 
 (1) View All Questions
@@ -369,7 +361,7 @@ Select options from below:
 
     # function to filter the questions based on user feedback
     def review_questions_filtered(self):
-        self.clear_terminal()
+        utils.clear_terminal()
         
         # initialize dictionary and other variables to be used for filtering 
         self.subjects_available = {}
@@ -410,7 +402,7 @@ Select options from below:
                 
         # loop to get user input to choose question type
         while True:
-            self.clear_terminal()
+            utils.clear_terminal()
             question_response = input('\nSelect Preferred Question Type\n(1) True or False\n(2) Multiple Choice\n(3) All Question Types\n\nEnter (number) of preferred question type: ')
             if question_response in ['1','2','3']:
                 if question_response == '1':
@@ -471,7 +463,7 @@ Select options from below:
         # call the review questions filtering function
         self.review_questions_filtered()
         input('\nFilters have been applied. Press Enter to start the exam reviewer..\n')
-        self.clear_terminal()
+        utils.clear_terminal()
         
         print("\nStarting the exam...\n")
         score = 0
@@ -480,10 +472,10 @@ Select options from below:
         # Show the questions
         # Show the questions
         for question in self.filtered_question_list:
-            self.clear_terminal()
+            utils.clear_terminal()
             question_count += 1
             print(f"No: {question_count}")
-            self.clear_terminal()
+            utils.clear_terminal()
             question_count += 1
             print(f"No: {question_count}")
             print(f"Subject: {question['subject']}")
@@ -606,7 +598,7 @@ def main():
     question_bank.load_questions()
 
     while True:
-        question_bank.clear_terminal()
+        utils.clear_terminal()
         print("""This is the Main Menu
 
 Select number of chosen option below:

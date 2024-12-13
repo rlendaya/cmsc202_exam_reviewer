@@ -479,9 +479,6 @@ Select options from below:
             utils.clear_terminal()
             question_count += 1
             print(f"No: {question_count}")
-            utils.clear_terminal()
-            question_count += 1
-            print(f"No: {question_count}")
             print(f"Subject: {question['subject']}")
             print(f"Type: {question['type']}\n")
             print(f"Question: {question['question']}\n")
@@ -590,7 +587,6 @@ Select options from below:
             self.user_answers.append(self.user_answers_details_per_question)
                     
         print(f"\nYour score: {score}/{len(self.filtered_question_list)}")
-        print(self.user_answers)
         input(f'\nPress Enter to continue...')
 
 

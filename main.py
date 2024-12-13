@@ -10,6 +10,7 @@ def main():
     # answer_storage = AnswerStorage()
     performance_analyzer = PerformanceAnalysis()
     customization = Customization()
+    exam_taken = False
 
     while True:
         utils.clear_terminal()
@@ -33,9 +34,14 @@ def main():
             performance_analyzer.correct_count = len([r for r in results if r['result'] == 'Correct'])
             performance_analyzer.wrong_count = len([r for r in results if r['result'] == 'Incorrect'])
             performance_analyzer.results = results
-            performance_analyzer.performance_summary()  # Show performance          
+            performance_analyzer.performance_summary()  # Show performance
+            exam_taken = True # Will be set to true after taking the exam          
         elif choice == "3":
-            performance_analyzer.performance_summary()
+            if exam_taken:
+                performance_analyzer.performance_summary()
+            else:
+               print("\nYou need to take an exam first before viewing your performance!")
+               input("Press Enter to return to the main menu...") 
         elif choice == "4":
             customization.customize_questions()
         elif choice == "5":

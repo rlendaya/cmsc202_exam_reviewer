@@ -33,35 +33,20 @@ import os
 class QuestionBank:
     # function to handle file path and initialize variable for question list and question ids
     def __init__(self):
-        self.file_path = utils.question_bank_file_path #linking to the data folder
         self.questions = []
         self.headers = []
         self.question_ids = []
         self.user_answers_details_per_question = {}
         self.user_answers = []
 
-    # function to handle loading of questions from file
-    def load_questions(self):
-        try:
-            with open(self.file_path, 'r', encoding='ISO-8859-1') as file:
-                reader = csv.DictReader(file)
-                self.questions = [row for row in reader]
-                self.headers = reader.fieldnames
-                self.question_ids = [question['id'] for question in self.questions]
-        except Exception as e:
-            print(f"An error occurred while loading questions: {e}")
-
-    # function to handle saving of question to file
-    def save_questions(self):
-        try:
-            with open(self.file_path, 'w') as file:
-                writer = csv.DictWriter(file, fieldnames=self.headers)     
-                writer.writeheader()
-                writer.writerows(self.questions)
-        
-        except Exception as e:
-              print(f"An error occurred while savings questions: {e}")
-                
+    def load_data_to_lists(self):
+        # load the questions from the file into the questions list. Results return is a tuple and first index is the list of questions
+        self.questions = utils.load_file(utils.question_bank_file_path)[0]
+        # load the headers from the file into the headers list. Results return is a tuple and first index is the list of questions
+        self.headers = utils.load_file(utils.question_bank_file_path)[1]
+        # load the unique question ids into the question_ids list
+        self.question_ids = [questions['id'] for questions in self.questions]
+          
     # function to get the index of question from the self.questions list for easier manipulation in deleting and editing.
     def get_index_of_question(self,id):
         # use list comprehension to get the dictionary to edit
@@ -172,10 +157,10 @@ class QuestionBank:
         # if user confirms, append to current question list and save to file. Otherwise, advice user that question is not saved
         if add_new_question_to_file.lower() == 'y':
             self.questions.append(new_question)
-            self.save_questions()
-            print(f'Changes are now saved to file {self.file_path}')
+            utils.save_file(utils.question_bank_file_path,self.questions,self.headers)
+            print(f'Changes are now saved to file {utils.question_bank_file_path}')
             # reload question from file to ensure initialized list variables are updated
-            self.load_questions()
+            self.load_data_to_lists()
         else:
             print('\nQuestion will not be saved to file. Thank you.')
     
@@ -202,9 +187,9 @@ class QuestionBank:
                 confirm_delete = input('\nAre you sure you want to delete the question above? (y|n) ')              
                 if confirm_delete.lower() == 'y':
                     del self.questions[self.index_of_question]
-                    self.save_questions()
-                    print(f'\nChanges are now saved to file {self.file_path}')
-                    self.load_questions()
+                    utils.save_file(utils.question_bank_file_path,self.questions,self.headers)
+                    print(f'\nChanges are now saved to file {utils.question_bank_file_path}')
+                    self.load_data_to_lists()
                     break
                 elif confirm_delete.lower() == 'n':
                     print('\nQuestion is not deleted.')
@@ -298,9 +283,9 @@ class QuestionBank:
                         save_new_values_to_dict = input('\nDo you with to save these new values? ( y|n only ) ')
                         if save_new_values_to_dict.lower() == 'y':
                             self.questions[self.index_of_question] = self.dict_to_edit
-                            self.save_questions()
-                            print(f'Changes are now saved to {self.file_path}')
-                            self.load_questions()
+                            utils.save_file(utils.question_bank_file_path,self.questions,self.headers)
+                            print(f'Changes are now saved to {utils.question_bank_file_path}')
+                            self.load_data_to_lists()
                             break
                         elif save_new_values_to_dict == 'n':
                             print('Changes are not saved.')
@@ -309,7 +294,7 @@ class QuestionBank:
                             print('Wrong input. Enter y or n only.')
                 
                 except Exception as e:
-                    print('\nInvalid Input. Enter the correct question ID...')
+                    print(f'\nInvalid Input. Enter the correct question ID... {e}')
                 
                 
                 
@@ -317,12 +302,16 @@ class QuestionBank:
     
     # function to handle menu options for question management
     def question_management_menu(self):
+        
+        # load data to the different lists
+        self.load_data_to_lists()
+    
+        utils.clear_terminal()
+        print('You are now in the Question Management Menu. You can view, edit, delete, and add questions here.')
+        
+        while True:
             utils.clear_terminal()
-            print('You are now in the Question Management Menu. You can view, edit, delete, and add questions here.')
-            
-            while True:
-                utils.clear_terminal()
-                questionManagementchoice = input('''
+            questionManagementchoice = input('''
 Select options from below: 
 (1) View All Questions
 (2) Edit Question
@@ -331,23 +320,25 @@ Select options from below:
 (5) Back to Main Menu
 
 : ''')
-                if questionManagementchoice == '1':
-                    utils.clear_terminal()
-                    self.view_question('1')
-                    input('\nPress Enter to go back to the previous menu')
-                elif questionManagementchoice == '2':
-                    self.edit_question()
-                    input('\nPress Enter to go back to the previous menu')
-                elif questionManagementchoice == '3':
-                    self.delete_question()
-                    input('\nPress Enter to go back to the previous menu')
-                elif questionManagementchoice == '4':
-                    self.add_question()
-                    input('\nPress Enter to go back to the previous menu')
-                elif questionManagementchoice == '5':
-                    break
-                else:
-                    print('Invalid Option. ')  
+            if questionManagementchoice == '1':
+                utils.clear_terminal()
+                self.view_question('1')
+                input('\nPress Enter to go back to the previous menu')
+            elif questionManagementchoice == '2':
+                self.edit_question()
+                input('\nPress Enter to go back to the previous menu')
+            elif questionManagementchoice == '3':
+                self.delete_question()
+                input('\nPress Enter to go back to the previous menu')
+            elif questionManagementchoice == '4':
+                self.add_question()
+                input('\nPress Enter to go back to the previous menu')
+            elif questionManagementchoice == '5':
+                break
+            else:
+                print('\nInvalid Option.') 
+                input('\nPress Enter to input again...')
+                    
                     
     
     # functions below are for the exam proper
@@ -542,7 +533,7 @@ Select options from below:
                 while True:
                     try:
                         # get user input for the correct answer
-                        user_answer = input("Enter your answer (T for true, F for false): ")
+                        user_answer = input("Enter your answer (T for true, F for false): ").capitalize()
                         # check if user's answer is within allowable values
                         if user_answer.lower() in ['t','f']:
                         # Check Answer
@@ -606,7 +597,14 @@ def main():
     question_bank = QuestionBank()
     
     # load the questions
-    question_bank.load_questions()
+    # question_bank.load_data_to_lists()
+    
+    
+    # question_bank.questions = utils.load_file(utils.question_bank_file_path)[0]
+    
+    # print(question_bank)
+    input('printed_question_bank')
+
 
     while True:
         utils.clear_terminal()

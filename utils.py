@@ -11,7 +11,11 @@ Function:
 
 import os
 import time
+import csv
 
+# initialize file paths variables
+question_bank_file_path = os.path.join("data",'questionSamples.csv')
+answer_storage_file_path = os.path.join("data",'answers.txt')
 
 # function that will clear the terminal based on user's operating system
 def clear_terminal():
@@ -26,5 +30,33 @@ def unique_id():
     
     return intTime
 
-question_bank_file_path = os.path.join("data",'questionSamples.csv')
-answer_storage_file_path = os.path.join("data",'answers.txt')
+# load file function
+def load_file(filepath):
+        try:
+            with open(filepath, 'r', encoding='ISO-8859-1') as file:
+                reader = csv.DictReader(file)
+                row_data = [row for row in reader]
+                headers = reader.fieldnames
+                
+                return row_data, headers
+            
+        except Exception as e:
+            print(f"An error occurred while loading questions: {e}")
+            
+# function to save files
+def save_file(file_path,data_to_be_saved,headers):
+        try:
+            with open(file_path, 'w') as file:
+                writer = csv.DictWriter(file, fieldnames=headers)     
+                writer.writeheader()
+                writer.writerows(data_to_be_saved)
+        
+        except Exception as e:
+              print(f"An error occurred while savings questions: {e}")
+              
+if __name__ == "__main__":
+    clear_terminal()
+    unique_id()
+    save_file()
+    load_file()
+    

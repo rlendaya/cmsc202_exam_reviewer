@@ -30,6 +30,7 @@ retrieve_answers:
 
 import os
 import utils as u
+import question_bank
 
 ''''
 def save_answers expected input: a list of dictionaries with the following info: 
@@ -44,12 +45,13 @@ sample:
 
 '''
 
-answer_storage_file_path = u.answer_storage_file_path
+def save_answers(answers,answer_storage_file_path):
+    # current_session_id = None
+    
+    # 
+    print(answers)
 
-
-def save_answers(answer_storage_file_path):
-    current_session_id = None
-
+    '''
     # Open the file where answer data will be stored
     with open(answer_storage_file_path, 'a') as file: 
 
@@ -85,7 +87,7 @@ def save_answers(answer_storage_file_path):
         
         # End session
         file.write("######### End of Session #########\n\n\n")
-
+    '''
 
     '''
     Session ID: 1734082085
@@ -118,9 +120,6 @@ def save_answers(answer_storage_file_path):
 
     ######### End of Session #########
     '''
-
-
-
 
 
 def retrieve_answers(answer_storage_file_path):
@@ -196,23 +195,23 @@ def retrieve_answers(answer_storage_file_path):
 
 ####################### TEST RUN #########################
 
-def test_main_menu():
-    while True:
-        print("\nMAIN MENU")
-        print("1. View Previous Sessions")
-        print("5. Exit\n")
+# def test_main_menu():
+#     while True:
+#         print("\nMAIN MENU")
+#         print("1. View Previous Sessions")
+#         print("5. Exit\n")
 
-        choice = input("Please choose a number from the main menu: ")
-        print("")
+#         choice = input("Please choose a number from the main menu: ")
+#         print("")
 
 
-        if choice == "1":
-            retrieve_answers(file_path)
-        elif choice == "5":
-            print("Exiting... Goodbye!")
-            break
-        else:
-            print("Incorrect input. Please choose agaian.")
+#         if choice == "1":
+#             retrieve_answers(file_path)
+#         elif choice == "5":
+#             print("Exiting... Goodbye!")
+#             break
+#         else:
+#             print("Incorrect input. Please choose agaian.")
 
 
 
@@ -232,6 +231,5 @@ def test_main_menu():
 
 
 if __name__ == "__main__":
-    test_main_menu()
-    retrieve_answers()
-    save_answers()
+    retrieve_answers(u.answer_storage_file_path)
+    save_answers(u.answer_storage_file_path)

@@ -478,11 +478,7 @@ Select options from below:
         question_count = 0
         
         # Show the questions
-        # Show the questions
         for question in self.filtered_question_list:
-            self.clear_terminal()
-            question_count += 1
-            print(f"No: {question_count}")
             self.clear_terminal()
             question_count += 1
             print(f"No: {question_count}")

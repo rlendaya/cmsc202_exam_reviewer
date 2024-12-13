@@ -3,6 +3,7 @@ from question_bank import QuestionBank
 # from answer_storage import AnswerStorage
 # from performance_analysis import PerformanceAnalysis
 from customization import Customization
+import utils
 
 def main():
     question_bank = QuestionBank()
@@ -11,7 +12,7 @@ def main():
     customization = Customization()
 
     while True:
-        question_bank.clear_terminal()
+        utils.clear_terminal()
         print("\nWelcome to the Exam Reviewer!")
         print("\nMain Menu:")
         print("1. Question Management")
@@ -27,8 +28,9 @@ def main():
         if choice == "1":
             # run the question management function
             question_bank.question_management_menu()
+            
         elif choice == "2":
-            question_bank.take_exam()
+            question_bank.take_exam()            
             # question_bank.take_exam(answer_storage)
         # elif choice == "3":
         #     performance_analysis.display_performance()

@@ -15,3 +15,5 @@ id,subject,type,question,answer_choice_1,answer_choice_2,answer_choice_3,answer_
 14,cmsc 206,true/false,Is this statement true? File system storage is a good alternative to using a DBMS,,,,,F
 15,cmsc 206,true/false,Triggers let us embed monitoring directly into the database rather than in an external application,,,,,T
 81,cmsc 202,true/false,ACM stands for Association for Computing Machinery,,,,,T
+78,cmsc 202,true/false,Pseudocode shows the program flow using shapes and arrows,,,,,F
+17,cmsc 202,true/false,programs can also be represented in a flowchart,,,,,T

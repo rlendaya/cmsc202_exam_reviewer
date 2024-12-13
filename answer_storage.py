@@ -29,6 +29,7 @@ retrieve_answers:
 
 
 import os
+import utils as u
 
 ''''
 def save_answers expected input: a list of dictionaries with the following info: 
@@ -43,17 +44,17 @@ sample:
 
 '''
 
-file_path = os.path.join("data",'answers.txt')
+answer_storage_file_path = u.answer_storage_file_path
 
 
-def save_answers(file_path):
+def save_answers(answer_storage_file_path):
     current_session_id = None
 
     # Open the file where answer data will be stored
-    with open(file_path, 'a') as file: 
+    with open(answer_storage_file_path, 'a') as file: 
 
         # Parse and format answers in answer_data list
-        for dictionary in file_path:
+        for dictionary in file:
             keys = list(dictionary.keys())
 
             session_id = dictionary[keys[0]]
@@ -122,20 +123,20 @@ def save_answers(file_path):
 
 
 
-def retrieve_answers(file_path):
+def retrieve_answers(answer_storage_file_path):
         
     review_session = input("Do you want to review previous study sessions? Type 'yes' or 'no'\n")
 
     if review_session.lower() == "yes":
         # Check first if file exists
-        if not os.path.exists(file_path):
+        if not os.path.exists(answer_storage_file_path):
             print("No study sessions available yet.")
             return # Return to main menu
 
         sessions = []  # List of all sessions available
 
         # Read through file containing sessions
-        with open(file_path, "r") as file:
+        with open(answer_storage_file_path, "r") as file:
             lines = file.readlines()
 
             # Get available sessions

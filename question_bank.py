@@ -33,7 +33,7 @@ import os
 class QuestionBank:
     # function to handle file path and initialize variable for question list and question ids
     def __init__(self):
-        self.file_path = os.path.join("data",'questionSamples.csv') #linking to the data folder
+        self.file_path = utils.question_bank_file_path #linking to the data folder
         self.questions = []
         self.headers = []
         self.question_ids = []

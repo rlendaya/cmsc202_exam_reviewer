@@ -25,3 +25,6 @@ def unique_id():
     intTime = int(time.time())
     
     return intTime
+
+question_bank_file_path = os.path.join("data",'questionSamples.csv')
+answer_storage_file_path = os.path.join("data",'answers.txt')

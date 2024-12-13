@@ -475,7 +475,6 @@ Select options from below:
         question_count = 0
         
         # Show the questions
-        # Show the questions
         for question in self.filtered_question_list:
             utils.clear_terminal()
             question_count += 1

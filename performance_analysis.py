@@ -2,6 +2,7 @@
 #Aleli
 #Diane Zevedy
 #Maria Lourdes
+import textwrap
 
 class PerformanceAnalysis:
     def __init__(self):
@@ -39,7 +40,12 @@ class PerformanceAnalysis:
         print(f"{'Question':<60} {'Your Answer':<18} {'Correct Answer':<18} {'Result':<15}")
         print("-" * 110)
         for i, res in enumerate(self.results, 1):
-            print(f"{i}.{res['question']:<60}{res['user_answer']:<18}{res['correct_answer']:<18}{res['result']:<15}")
+            # Wrap question text to fit within 60 characters per line
+            wrapped_question = textwrap.wrap(res['question'], width=60)
+            print(f"{i}. {wrapped_question[0]:<60}{res['user_answer']:<18}{res['correct_answer']:<18}{res['result']:<15}")
+            # Print additional lines of the question, if wrapped
+            for line in wrapped_question[1:]:
+                print(f"   {line:<60}")
         
         # Wait for user input before returning to the main menu
         input("\nPress Enter to return to the main menu...")

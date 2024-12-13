@@ -43,14 +43,17 @@ sample:
 
 '''
 
-def save_answers(answer_data):
+file_path = os.path.join("data",'answers.txt')
+
+
+def save_answers(file_path):
     current_session_id = None
 
     # Open the file where answer data will be stored
-    with open('answers.txt', 'a') as file: 
+    with open(file_path, 'a') as file: 
 
         # Parse and format answers in answer_data list
-        for dictionary in answer_data:
+        for dictionary in file_path:
             keys = list(dictionary.keys())
 
             session_id = dictionary[keys[0]]
@@ -119,19 +122,20 @@ def save_answers(answer_data):
 
 
 
-def retrieve_answers(file_name):
+def retrieve_answers(file_path):
+        
     review_session = input("Do you want to review previous study sessions? Type 'yes' or 'no'\n")
 
     if review_session.lower() == "yes":
         # Check first if file exists
-        if not os.path.exists(file_name):
+        if not os.path.exists(file_path):
             print("No study sessions available yet.")
             return # Return to main menu
 
         sessions = []  # List of all sessions available
 
         # Read through file containing sessions
-        with open(file_name, "r") as file:
+        with open(file_path, "r") as file:
             lines = file.readlines()
 
             # Get available sessions
@@ -202,7 +206,7 @@ def test_main_menu():
 
 
         if choice == "1":
-            retrieve_answers("answers.txt")
+            retrieve_answers(file_path)
         elif choice == "5":
             print("Exiting... Goodbye!")
             break
@@ -211,18 +215,22 @@ def test_main_menu():
 
 
 
-test_answer_data1 = [{'session_id': 1734082085, 'id': '13', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 3, 'question': 'It uniquely identifies each entity in the entity set'}, 
-{'session_id': 1734082085, 'id': '12', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 3, 'question': 'It is the number of vertices in a graph.'}, 
-{'session_id': 1734082085, 'id': '19', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 4, 'question': 'It is the number of edges in a graph.'}]
+# test_answer_data1 = [{'session_id': 1734082085, 'id': '13', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 3, 'question': 'It uniquely identifies each entity in the entity set'}, 
+# {'session_id': 1734082085, 'id': '12', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 3, 'question': 'It is the number of vertices in a graph.'}, 
+# {'session_id': 1734082085, 'id': '19', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 4, 'question': 'It is the number of edges in a graph.'}]
 
-test_answer_data2 = [{'session_id': 1734082086, 'id': '14', 'subject': 'cmsc 203', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 3, 'question': 'It uniquely identifies each entity in the entity set'}, 
-{'session_id': 1734082086, 'id': '13', 'subject': 'cmsc 201', 'type': 'T/F', 'correct_answer': 't', 'user_answer': 'F', 'question': 'Order is the number of vertices in a graph.'}, 
-{'session_id': 1734082086, 'id': '20', 'subject': 'cmsc 202', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 4, 'question': 'It is the number of edges in a graph.'}]
+# test_answer_data2 = [{'session_id': 1734082086, 'id': '14', 'subject': 'cmsc 203', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 3, 'question': 'It uniquely identifies each entity in the entity set'}, 
+# {'session_id': 1734082086, 'id': '13', 'subject': 'cmsc 201', 'type': 'T/F', 'correct_answer': 't', 'user_answer': 'F', 'question': 'Order is the number of vertices in a graph.'}, 
+# {'session_id': 1734082086, 'id': '20', 'subject': 'cmsc 202', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 4, 'question': 'It is the number of edges in a graph.'}]
 
-save_answers(test_answer_data1) # creates answers.txt file that saves the answers 
+# save_answers(test_answer_data1) # creates answers.txt file that saves the answers 
 
-save_answers(test_answer_data2)
+# save_answers(test_answer_data2)
 
-test_main_menu()
+# test_main_menu()
 
 
+if __name__ == "__main__":
+    test_main_menu()
+    retrieve_answers()
+    save_answers()

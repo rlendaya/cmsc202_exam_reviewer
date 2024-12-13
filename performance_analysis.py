@@ -53,3 +53,10 @@ class PerformanceAnalysis:
 # Create an instance of the PerformanceAnalysis class
 performance_analyzer = PerformanceAnalysis() 
 
+
+def main():
+    performance_analysis = PerformanceAnalysis
+
+
+if __name__ == "__main__":
+    main()

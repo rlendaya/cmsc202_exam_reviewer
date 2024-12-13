@@ -47,7 +47,7 @@ def main():
         elif choice == "4":
             customization.customize_questions()
         elif choice == "5":
-            answer_storage.retrieve_answers("answers.txt")
+            answer_storage.test_main_menu()
         elif choice == "6":
             print("Exiting... Goodbye!")
             break

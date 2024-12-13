@@ -2,14 +2,12 @@
 #Jerry Luis
 #Ellen Dee
 
+import os
 
 '''
-MODULE INFO
-
 save_answer:
 -called when taking the test proper, when user agrees to save answers
 -takes a list of dictionaries from question_bank.py and reformats it
--adds session date
 -adds and saves the new format to a file
 
 
@@ -24,113 +22,147 @@ retrieve_answers:
 
 
 
-import os
-import datetime
 
-# Reverting to functions for now while fine tuning code
 #class AnswerStorage:
     #def __init__(self):
         #self.answers = {}  # Store user answers, key=question ID and value=answer
         #self.file_name = "answer_storage.txt"
 
+#     (question['id'], question['question'], question['correct_answer'], user_answer)
 
 
-def save_answers(answer_data): # Expected input: a list of tuples with the following info: (question['id'], question['question'], question['correct_answer'], user_answer) 
-    session_date = datetime.datetime.now().strftime("%Y-%m-%d")
+
+''''
+Expected input: a list of dictionaries with the following info: 
+[
+{session_id:'session_id', question_id: 'question_id, subject: 'subject', type: 'type', correct_answer: correct_answer, user_answer: 'user_answer', question: 'question text'
+]
+
+sample:
+[{'session_id': 1734082085, 'id': '13', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 3, 'question': 'It uniquely identifies each entity in the entity set'}, 
+{'session_id': 1734082385, 'id': '12', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 3, 'question': 'It is the number of vertices in a graph.'}, 
+{'session_id': 1734082185, 'id': '19', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 4, 'question': 'It is the number of edges in a graph.'}]
+
+
+    '''
+def save_answers(answer_data):
+    # Parse and format answers in answer_data list
+    current_session_id = None
 
     # Open the file where answer data will be stored
     with open('answers.txt', 'a') as file:
+
+        for dictionary in answer_data:
+            keys = list(dictionary.keys())
+
+            session_id = dictionary[keys[0]]
+            question_id = dictionary[keys[1]]
+            subject = dictionary[keys[2]]
+            question_text = dictionary[keys[6]]
+            user_answer = dictionary[keys[5]]
+            correct_answer = dictionary[keys[4]]
+            is_correct = (str(user_answer).lower() == str(correct_answer).lower()) # Checks correctness of user answer
+
+    # Ends the session and starts session if new session available
+    if session_id != current_session_id:
+        if current_session_id is not None:
+            file.write("==== End of Session ====\n\n") # End of session
+
         # Header as the session date
-        file.write(f"Session Date: {session_date}\n")
+        file.write(f"Session ID: {session_id}\n")
         file.write(" ========================\n")
+        current_session_id = session_id
 
-    # Format answers in answer_data list
-    for answer in answer_data:
-        question_id = answer[0]
-        question_text = answer[1]
-        user_answer = answer[2]
-        correct_answer = answer[3]
-        is_correct = (user_answer == correct_answer) # Checks correctness of user answer
-
-        # Write question details in file
-        file.write(f"Question ID: {question_id}\n")
-        file.write(f"Question: {question_text}\n")
-        file.write(f"Correct Answer: {correct_answer}\n")
-        file.write(f"User Answer: {user_answer}\n")
-        file.write(f"Is Correct: {is_correct}\n\n") # create an empty line in between questions
+    # Write question details in file
+    file.write(f"Question ID: {question_id}\n")            
+    file.write(f"Subject: {subject}\n")
+    file.write(f"Question: {question_text}\n")
+    file.write(f"Correct Answer: {correct_answer}\n")
+    file.write(f"User Answer: {user_answer}\n")
+    file.write(f"Is Correct: {is_correct}\n\n") # create an empty line in between questions
     
     # End session
     file.write("==== End of Session ====\n\n")
 
 
-'''
-Session Date: 2024-12-25
-=========================
-Question ID: 8
-Question: What is 2+2?
-Correct Answer: 4
-User Answer: 4
-Is Correct: True
+    '''
+    Session ID: 1734082085
+    =========================
+    Question ID: 8
+    Subject: CMSC 202
+    Question: What is 2+2?
+    Correct Answer: 4
+    User Answer: 4
+    Is Correct: True
 
-Question ID: 3
-Question: Is a set unordered?
-Correct Answer: True
-User Answer: False
-Is Correct: False
+    Question ID: 3
+    Subject: CMSC 201
+    Question: Is a set unordered?
+    Correct Answer: True
+    User Answer: False
+    Is Correct: False
 
-==== End of Session ====
+    ==== End of Session ====
 
-Session Date: 2024-12-26
-========================
-Question ID: 1
-Question: "What is 2+6?"
-Correct Answer: 4
-User Answer: 4
-Is Correct: False
+    Session Date: 1734082086
+    ========================
+    Question ID: 1
+    Subject: CMSC 202
+    Question: "What is 2+6?"
+    Correct Answer: 4
+    User Answer: 4
+    Is Correct: False
 
-==== End of Session ====
-'''
+    ==== End of Session ====
+    '''
 
 
-def retrieve_answers(filename):
-    review_session = input("Do you want to review previous study sessions? Type 'yes' or 'no.'")
+
+
+
+def retrieve_answers(file_name):
+    review_session = input("Do you want to review previous study sessions? Type 'yes' or 'no'\n")
 
     if review_session.lower() == "yes":
         # Check first if file exists
-        if not os.path.exists(filename):
+        if not os.path.exists(file_name):
             print("No study sessions available yet.")
             return # Return to main menu
 
-        sessions = []  # List of all session dates available
+        sessions = []  # List of all sessions available
 
         # Read through file containing sessions
-        with open(filename, "r") as file:
+        with open(file_name, "r") as file:
             lines = file.readlines()
 
-            # Get available session dates
+            # Get available sessions
             for line in lines:
                 line = line.strip() # Remove leading/trailing spaces
-                if line.startswith("Session Date:"):
-                    session_date = line.split(": ")[1]
-                    sessions.append(session_date)
+                if line.startswith("Session ID:"):
+                    session_id = line.split(": ")[1]
+                    sessions.append(session_id)
         
         # Check that file has session/s
         if not sessions:
             print("No study sessions available yet.")
             return # Return to main menu
-
-        # Show available sessions
-        print("Available Study Sessions:")
-        for idx, session in enumerate(sessions):
-            print(f"{idx + 1}. Session: {session}")
+        
 
         # Ask user to choose study session from list:
         try:
-            choice = int(input("\nSelect a session number to view questions and answers, or 0 to go back to main menu"))
+            print("\nSelect a session number to view questions and answers, or 0 to go back to main menu")
+            # Show available sessions
+            print("Available Study Sessions: \n")
+            print("0. Go back to Main Menu")
+            for idx, session in enumerate(sessions):
+                print(f"{idx + 1}. Session: {session}")
+            
+            choice = int(input("\nNumber: "))
             if choice == 0:
                 return # Return to Main Menu
             elif 1 <= choice <= len(sessions):
                 current_session = sessions[choice - 1]
+                print(f"current session: {current_session}")
 
                 # Display data of chosen session
                 session_found = False
@@ -152,6 +184,42 @@ def retrieve_answers(filename):
             print("Invalid input. Please input a number.")
     
     else:
+        print()
         print("Great. We'll return to the main menu.") # Handles if the user chooses 'no'
 
-    
+        
+
+
+
+# TEST RUN
+
+def test_main_menu():
+    while True:
+        print("\nMAIN MENU")
+        print("1. View Previous Sessions")
+        print("5. Exit\n")
+
+        choice = input("Please choose a number from the main menu.\n")
+
+
+        if choice == "1":
+            retrieve_answers("answers.txt")
+        elif choice == "5":
+            print("Exiting... Goodbye!")
+            break
+        else:
+            print("Incorrect input. Please choose agaian.")
+
+
+
+
+
+test_answer_data = [{'session_id': 1734082085, 'id': '13', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 3, 'question': 'It uniquely identifies each entity in the entity set'}, 
+{'session_id': 1734082085, 'id': '12', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 3, 'question': 'It is the number of vertices in a graph.'}, 
+{'session_id': 1734082085, 'id': '19', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 4, 'question': 'It is the number of edges in a graph.'}]
+
+save_answers(test_answer_data) # creates answers.txt file that saves the answers 
+
+test_main_menu()
+
+

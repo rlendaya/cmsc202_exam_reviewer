@@ -1,14 +1,14 @@
 #This part is the Feature selection
 from question_bank import QuestionBank
 # from answer_storage import AnswerStorage
-# from performance_analysis import PerformanceAnalysis
+from performance_analysis import PerformanceAnalysis
 from customization import Customization
 import utils
 
 def main():
     question_bank = QuestionBank()
     # answer_storage = AnswerStorage()
-    # performance_analysis = PerformanceAnalysis(answer_storage)
+    performance_analyzer = PerformanceAnalysis()
     customization = Customization()
 
     while True:
@@ -28,12 +28,14 @@ def main():
         if choice == "1":
             # run the question management function
             question_bank.question_management_menu()
-            
         elif choice == "2":
-            question_bank.take_exam()            
-            # question_bank.take_exam(answer_storage)
-        # elif choice == "3":
-        #     performance_analysis.display_performance()
+            results = question_bank.take_exam() 
+            performance_analyzer.correct_count = len([r for r in results if r['result'] == 'Correct'])
+            performance_analyzer.wrong_count = len([r for r in results if r['result'] == 'Incorrect'])
+            performance_analyzer.results = results
+            performance_analyzer.performance_summary()  # Show performance          
+        elif choice == "3":
+            performance_analyzer.performance_summary()
         elif choice == "4":
             customization.customize_questions()
         elif choice == "5":

@@ -473,6 +473,7 @@ Select options from below:
         print("\nStarting the exam...\n")
         score = 0
         question_count = 0
+        results = []
         
         # Show the questions
         for question in self.filtered_question_list:
@@ -585,10 +586,20 @@ Select options from below:
             
             # append the dictionary of this question to a list of exam answers.
             self.user_answers.append(self.user_answers_details_per_question)
-                    
+
+            # Append result to results list
+            results.append({
+                'id': question['id'],
+                'question': question['question'],  # Include the question text
+                'user_answer': user_answer,  # Include the user's answer
+                'correct_answer': question['correct_answer'],  # Include the correct answer
+                'result': 'Correct' if user_answer == question['correct_answer'] else 'Incorrect'
+            })
+        
+
         print(f"\nYour score: {score}/{len(self.filtered_question_list)}")
         input(f'\nPress Enter to continue...')
-
+        return results
 
 def main():
     

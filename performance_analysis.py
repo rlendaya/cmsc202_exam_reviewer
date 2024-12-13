@@ -41,6 +41,9 @@ class PerformanceAnalysis:
         for i, res in enumerate(self.results, 1):
             print(f"{i}.{res['question']:<60}{res['user_answer']:<18}{res['correct_answer']:<18}{res['result']:<15}")
         
+        # Wait for user input before returning to the main menu
+        input("\nPress Enter to return to the main menu...")
+
 # Create an instance of the PerformanceAnalysis class
 performance_analyzer = PerformanceAnalysis() 
 

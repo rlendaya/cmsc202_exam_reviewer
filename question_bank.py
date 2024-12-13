@@ -476,7 +476,6 @@ Select options from below:
         print("\nStarting the exam...\n")
         score = 0
         question_count = 0
-        question_count = 0
         
         # Show the questions
         # Show the questions
@@ -488,8 +487,6 @@ Select options from below:
             question_count += 1
             print(f"No: {question_count}")
             print(f"Subject: {question['subject']}")
-            print(f"Type: {question['type']}\n")
-            print(f"Question: {question['question']}\n")
             print(f"Type: {question['type']}\n")
             print(f"Question: {question['question']}\n")
             

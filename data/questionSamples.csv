@@ -16,4 +16,4 @@ id,subject,type,question,answer_choice_1,answer_choice_2,answer_choice_3,answer_
 15,cmsc 206,true/false,Triggers let us embed monitoring directly into the database rather than in an external application,,,,,T
 81,cmsc 202,true/false,ACM stands for Association for Computing Machinery,,,,,T
 78,cmsc 202,true/false,Pseudocode shows the program flow using shapes and arrows,,,,,F
-17,cmsc 202,true/false,programs can also be represented in a flowchart,,,,,T
+17,cmsc 202,true/false,Programs can also be represented in a flowchart.,,,,,T

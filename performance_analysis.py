@@ -4,22 +4,46 @@
 #Maria Lourdes
 
 '''
-This module is responsible for  
+This module is responsible for displaying the results of the exam 
 
+Functions in this module:
+1. PerformanceAnalysis - this compute the results and display in tabular format the answer per question
 
 '''
 import textwrap
+import datetime
 
 class PerformanceAnalysis:
     def __init__(self):
         self.correct_count = 0 
         self.wrong_count = 0
+        
+    def performance_summary(self,answers):
         self.results = [] 
-
-
-    def performance_summary(self):
+        #############################################
+        # Add the answer storage as source of historical data for performance analysis
+        
+        # count the number of correct and incorrect answers
+        self.correct_count = len([answer for answer in answers if int(answer['is_answer_correct']) == 1])
+        self.wrong_count = len([answer for answer in answers if int(answer['is_answer_correct']) == 0])
+        review_date = datetime.datetime.fromtimestamp(int(answers[0]['session_id'])).strftime("%Y-%m-%d %I:%M %p")
+        subject = str(answers[0]['subject']).upper()
+        
+        for answer in answers:
+            self.results.append({
+                'id': answer['id'],
+                'question': answer['question'],  # Include the question text
+                'user_answer': answer['user_answer'],  # Include the user's answer
+                'correct_answer': answer['correct_answer'],  # Include the correct answer
+                'result': 'Correct' if int(answer['is_answer_correct']) == 1 else 'Incorrect'
+                
+            })
+        
+        ##FIELDS ABOVE TO INCORPORATE ANSWER STORAGE##
+        ##############################################
+        
         #Shows a summary of the user's overall performance
-        total_questions = len(self.results) # Total nyumber of questions
+        total_questions = len(answers) # Total number of questions
         
         #Calculate the percentage of correct answers
         if total_questions > 0:
@@ -28,13 +52,15 @@ class PerformanceAnalysis:
             percentage = 0 #This is to prevent math error
 
         #Determine if pass or fail
-        if percentage >= 70:
+        if percentage >= 60:
             status = "Pass"
         else:
             status = "Fail"
 
         
         print("\n==== Performance Summary ====")
+        print(f'Review Date: {review_date}')
+        print(f'Subject: {subject}')
         print(f"Total Questions: {total_questions}")
         print(f"Correct Answers: {self.correct_count}")
         print(f"Wrong Answers: {self.wrong_count}")
@@ -54,14 +80,13 @@ class PerformanceAnalysis:
                 print(f"   {line:<60}")
         
         # Wait for user input before returning to the main menu
-        input("\nPress Enter to return to the main menu...")
 
 # Create an instance of the PerformanceAnalysis class
 performance_analyzer = PerformanceAnalysis() 
 
 
 def main():
-    performance_analysis = PerformanceAnalysis
+    performance_analysis = PerformanceAnalysis()
 
 
 if __name__ == "__main__":

@@ -4,39 +4,26 @@
 #Jade Carl``
 
 '''
-This question bank module will handle the following:
-
-1. Manage questions
-    - view question
-    - edit question
-    - delete question
-    - add question
-    
-2. Conduct review
-    - get review specifications from user
-        - user select topic
-        - user select question type
-        - user input number of desired questions
-    - display the questions
-    - gather answer from user
-    - check answer for correctness
-    
 Function in this module:
+
+Helper functions
 1. load_data_to_lists
 2. get_index_of_questions
 
-Modules below are part of the question management 
+functions below are part of the question management
 3. view_questions
-4. add_questions
-5.
+4. add_question
+5. edit question
+6. delete question
+7. 
+
+
+
 '''
 
 import random
 import utils
-
-
-# os module for interoperability of file path with different OS
-import os
+import textwrap
 
 class QuestionBank:
     # function to handle file path and initialize variable for question list and question ids
@@ -44,8 +31,6 @@ class QuestionBank:
         self.questions = []
         self.headers = []
         self.question_ids = []
-        self.user_answers_details_per_question = {}
-        self.user_answers = []
 
     def load_data_to_lists(self):
         # load the questions from the file into the questions list. Results return is a tuple and first index is the list of questions
@@ -57,7 +42,7 @@ class QuestionBank:
           
     # function to get the index of question from the self.questions list for easier manipulation in deleting and editing.
     def get_index_of_question(self,id):
-        # use list comprehension to get the dictionary to edit
+        # use list comprehension to get the dictionary to edit for the edit question function
         self.dict_to_edit = [question for question in self.questions if question['id'] == id][0]
         
         # get the index of the question to edit from the self.questions list
@@ -70,27 +55,47 @@ class QuestionBank:
 
         number_of_questions = len(self.questions)
         utils.clear_terminal()
-        print(f'There are {number_of_questions} questions in total!\n') 
+        print(f'\nThere are {number_of_questions} questions in total!\n') 
+        
+        # initialize variables for header alignment
+        no_width = 5
+        subject_width = 10
+        type_width = 20
+        question_width = 70
         
         # print all the questions. There are types of output identified by an output code:
         # Code '1': Will print a sequential number to distinguish each question for readability
         # Code '2': will print the question_id which may not be sequential and is used to identify the question for other processing
         if output_code == '1':
+           
+            
             # print question headers
-            print(f'{"No":^3}{"Subject":^10}{"Question Type":^20}{"Question":<165}\n')
+            header = (f'{"No":<{no_width}}{"Subject":<{subject_width}}{"Question Type":<{type_width}}{"Question":<{question_width}}')
+            print('-'*len(header))
+            print(header)
+            print('-'*len(header))
             # counter variable for numbering of question on print. This is different from the unique question id
             count = 0
             # loop through the self.questions list and then print.
-            for questions in self.questions:
+            for question in self.questions:
                 count += 1
-                print(f'{count:^3}{questions["subject"]:^10}{questions["type"]:^20}{questions["question"]:<165}')
+                formatted_question = textwrap.wrap(question['question'],70)
+                print(f'{count:<{no_width}}{question["subject"]:<{subject_width}}{question['type']:<{type_width}}{formatted_question[0]:<{question_width}}')
+                for line in formatted_question[1:]:
+                    print(f'{' '*35}{line}')
+    
         else:
             # print question headers
-            print(f'{"Id":^3}{"Subject":^10}{"Question Type":^20}{"Question":<165}\n')
-            for questions in self.questions:
-                print(f'{questions["id"]:^3}{questions["subject"]:^10}{questions["type"]:^20}{questions["question"]:<165}')
+            header = (f'{"Id":<{no_width}}{"Subject":<{subject_width}}{"Question Type":<{type_width}}{"Question":<{question_width}}')
+            print('-'*len(header))
+            print(header)
+            print('-'*len(header))
+            for question in self.questions:
+                formatted_question = textwrap.wrap(question['question'],70)
+                print(f'{question["id"]:<{no_width}}{question["subject"]:<{subject_width}}{question['type']:<{type_width}}{formatted_question[0]:<{question_width}}')
+                for line in formatted_question[1:]:
+                    print(f'{' '*35}{line}')
 
- 
     # function to add questions to the question bank
     def add_question(self):
         utils.clear_terminal()
@@ -106,7 +111,7 @@ class QuestionBank:
                 new_question['id'] = new_question_id
                 break
             
-        # ask user for the values of the other keys in the question dictionary
+        # ask user to input values of the other keys in the question dictionary
         new_question['subject'] = input('Enter subject: ')
         
         # get question type but restrict the values to just true/false or multiple choice
@@ -251,14 +256,18 @@ class QuestionBank:
                                 # if current key is correct answer, limit input to just t and f
                                 while True:
                                     new_value = input(f'Enter new value for {key}: ')
-                                    if key != 'correct_answer':
-                                        self.dict_to_edit[key] = new_value
-                                        break
-                                    elif key == 'correct_answer' and new_value.lower() in ['t','f']:
-                                        self.dict_to_edit[key] = new_value.upper()
-                                        break
+                                    
+                                    if new_value != '':
+                                        if key != 'correct_answer':
+                                            self.dict_to_edit[key] = new_value
+                                            break
+                                        elif key == 'correct_answer' and new_value.lower() in ['t','f']:
+                                            self.dict_to_edit[key] = new_value.upper()
+                                            break
+                                        else:
+                                            print('\nWrong Input. Enter t or f only')
                                     else:
-                                        print('\nWrong Input. Enter t or f only')
+                                        print(f'\n{key} cannot be blank. Input a value.\n')
                         
                         print('Here are the new values.\n')
                         for key,value in self.dict_to_edit.items():
@@ -274,19 +283,23 @@ class QuestionBank:
                                 # if key is correct answer, limit input to just 1 - 4
                                 while True:
                                     new_value = input(f'Enter new value for {key}: ')
-                                    if key != 'correct_answer':
-                                        self.dict_to_edit[key] = new_value
-                                        break
-                                    elif key == 'correct_answer' and new_value in ['1','2','3','4']:
-                                        self.dict_to_edit[key] = new_value
-                                        break
+                                    if new_value != '':
+                                        if key != 'correct_answer':
+                                            self.dict_to_edit[key] = new_value
+                                            break
+                                        elif key == 'correct_answer' and new_value in ['1','2','3','4']:
+                                            self.dict_to_edit[key] = new_value
+                                            break
+                                        else:
+                                            print('\nWrong Input. Enter 1 - 4 only')
                                     else:
-                                        print('\nWrong Input. Enter 1 - 4 only')
+                                        print(f'\n{key} cannot be blank. Input a value.\n')
                         
                         print('Here are the new values.\n')
                         for key,value in self.dict_to_edit.items():
                             print(f'{key}: {value}')
                     
+                    # loop to confirm with user if they want to save the changes in the file
                     while True:
                         save_new_values_to_dict = input('\nDo you with to save these new values? ( y|n only ) ')
                         if save_new_values_to_dict.lower() == 'y':
@@ -300,11 +313,11 @@ class QuestionBank:
                             break
                         else:
                             print('Wrong input. Enter y or n only.')
-                    
-                    break
                 
+                    break      
+                                    
                 except Exception as e:
-                    print(f'\nInvalid Input. Enter the correct question ID... {e}')
+                    print(f'\nInvalid Input. Enter the correct question ID...')
                 
                 
                 
@@ -352,17 +365,16 @@ Select options from below:
                     
     
     # functions below are for the exam proper
-    '''
-    This will be the exam proper user journey
-    1. Ask user for the exam filters
-        - topic
-        - question type
-        - number of desired questions
-    2. Take exam
-    3. Record output and correct answers
-    4. Display final score and store results in a dictionary
-    '''
-
+  
+    # This will be the exam proper user journey
+    # 1. Ask user for the exam filters
+    #     - topic
+    #     - question type
+    #     - number of desired questions
+    # 2. Take exam
+    # 3. Record output and correct answers
+    # 4. Display final score and store results in a dictionary
+    
     # function to filter the questions based on user feedback
     def review_questions_filtered(self):
         utils.clear_terminal()
@@ -382,8 +394,7 @@ Select options from below:
         subject_number+=1
         self.subjects_available[subject_number] = 'All Subjects'
          
-        
-        print('\nWelcome to the mock exam!')
+        print('\nWelcome to the exam reviewer!')
         print('\nLet\'s setup some of the review settings before we start.\n ')
         
         # filter user input for available subjects and question type
@@ -463,6 +474,11 @@ Select options from below:
 
     # function to conduct the exam review
     def take_exam(self):
+        
+        # initialize the list to store user_answers and details per answer for this session
+        self.user_answers = []
+        self.user_answers_details_per_question = {}
+        
         # load the questions in the list
         self.load_data_to_lists()
         
@@ -477,6 +493,7 @@ Select options from below:
         print("\nStarting the exam...\n")
         score = 0
         question_count = 0
+        is_answer_correct = 0
         results = []
         
         # Show the questions
@@ -500,10 +517,12 @@ Select options from below:
                         if 1 <= user_answer <= 4:
                             if user_answer == int(question['correct_answer']):
                                 score += 1
+                                is_answer_correct = 1
                                 print(f'\nGood job! You got the correct answer.')
                                 input('\nPress Enter to continue...')
                                 break
                             else:
+                                is_answer_correct = 0
                                 print(f'\nYour answer is wrong. Correct answer is {question['correct_answer']}')
                                 input('\nPress Enter to continue...')
                                 break
@@ -525,10 +544,12 @@ Select options from below:
                         # Check Answer
                             if user_answer.capitalize() == question['correct_answer']:
                                 score += 1
+                                is_answer_correct = 1
                                 print(f'\nGood job! You got the correct answer.')
                                 input('\nPress Enter to continue...')
                                 break
                             else:
+                                is_answer_correct = 0
                                 print(f'\nYour answer is wrong. Correct answer is {question['correct_answer']}')
                                 input('\nPress Enter to continue...')
                                 break
@@ -547,22 +568,13 @@ Select options from below:
                 'type' : question['type'],
                 'correct_answer' : question['correct_answer'],
                 'user_answer' : user_answer,
-                'question' : question['question']
+                'question' : question['question'],
+                'is_answer_correct' : is_answer_correct
             }
             
             # append the dictionary of this question to a list of exam answers.
             self.user_answers.append(self.user_answers_details_per_question)
-
-            # Append result to results list
-            results.append({
-                'id': question['id'],
-                'question': question['question'],  # Include the question text
-                'user_answer': user_answer,  # Include the user's answer
-                'correct_answer': question['correct_answer'],  # Include the correct answer
-                'result': 'Correct' if user_answer == question['correct_answer'] else 'Incorrect'
-            })
-        
-
+            
         print(f"\nYour score: {score}/{len(self.filtered_question_list)}")
         input(f'\nPress Enter to continue...')
         return results
@@ -571,37 +583,5 @@ def main():
     
     question_bank = QuestionBank()
     
-    # load the questions
-    # question_bank.load_data_to_lists()
-    
-    
-    # question_bank.questions = utils.load_file(utils.question_bank_file_path)[0]
-    
-    # print(question_bank)
-    input('printed_question_bank')
-
-
-    while True:
-        utils.clear_terminal()
-        print("""This is the Main Menu
-
-Select number of chosen option below:
-
-(1) Question Management
-(2) Start Review
-(3) Exit Program
-""")
-        choice = input("Enter your choice: ")
-        
-        if choice == '1':
-            question_bank.question_management_menu()
-        elif choice == '2':
-            question_bank.take_exam()
-        elif choice == '3':
-            print("Exiting...")
-            break
-        else:
-            print("Invalid choice. Please select a valid option.")
-
 if __name__ == "__main__":
     main()

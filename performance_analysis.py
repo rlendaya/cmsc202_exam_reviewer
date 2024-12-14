@@ -20,27 +20,22 @@ class PerformanceAnalysis:
         
     def performance_summary(self,answers):
         self.results = [] 
-        #############################################
-        # Add the answer storage as source of historical data for performance analysis
-        
+         
         # count the number of correct and incorrect answers
         self.correct_count = len([answer for answer in answers if int(answer['is_answer_correct']) == 1])
         self.wrong_count = len([answer for answer in answers if int(answer['is_answer_correct']) == 0])
         review_date = datetime.datetime.fromtimestamp(int(answers[0]['session_id'])).strftime("%Y-%m-%d %I:%M %p")
-        subject = str(answers[0]['subject']).upper()
+        subject = ",".join(list(set([answer['subject'] for answer in answers])))
         
+        # generate the list needed from the answer list to display data
         for answer in answers:
             self.results.append({
                 'id': answer['id'],
                 'question': answer['question'],  # Include the question text
                 'user_answer': answer['user_answer'],  # Include the user's answer
                 'correct_answer': answer['correct_answer'],  # Include the correct answer
-                'result': 'Correct' if int(answer['is_answer_correct']) == 1 else 'Incorrect'
-                
+                'result': 'Correct' if int(answer['is_answer_correct']) == 1 else 'Incorrect'                
             })
-        
-        ##FIELDS ABOVE TO INCORPORATE ANSWER STORAGE##
-        ##############################################
         
         #Shows a summary of the user's overall performance
         total_questions = len(answers) # Total number of questions
@@ -67,14 +62,15 @@ class PerformanceAnalysis:
         print(f"Score Percentage: {percentage:.2f}% ({status})")
 
         #Detailed exam results in tabular format
+        header = f"{'Question':<70} {'Your Answer':<18} {'Correct Answer':<18} {'Result':<15}"
         print("\nDetailed Exam Results:")
-        print("-" * 110)
-        print(f"{'Question':<60} {'Your Answer':<18} {'Correct Answer':<18} {'Result':<15}")
-        print("-" * 110)
+        print("-" * len(header))
+        print(header)
+        print("-" * len(header))
         for i, res in enumerate(self.results, 1):
             # Wrap question text to fit within 60 characters per line
             wrapped_question = textwrap.wrap(res['question'], width=60)
-            print(f"{i}. {wrapped_question[0]:<60}{res['user_answer']:<18}{res['correct_answer']:<18}{res['result']:<15}")
+            print(f"\n{i}. {wrapped_question[0]:<70}{res['user_answer']:<18}{res['correct_answer']:<18}{res['result']:<15}")
             # Print additional lines of the question, if wrapped
             for line in wrapped_question[1:]:
                 print(f"   {line:<60}")

@@ -32,33 +32,40 @@ def retrieve_answers(answer_storage_file_path):
     
     # read the saved answers from the csv file (answer.csv)
     answers = u.load_file(u.answer_storage_file_path)[0]
-    headers = u.load_file(u.answer_storage_file_path)[1]
     
     # initalize the dictionary where the filtered values will be stored
     session_list = []
     session_id = []
     session_count = 0
-    
+    exam_type = []
+    subjects = []
         
     # show user all the unique review sessions
     for answer in answers:        
         if answer['session_id'] not in session_id:
             session_count += 1
-            question_count = len(answer)
+            current_session_id = answer['session_id']
+            exam_type = ",".join(list(set([answer['type'] for answer in answers if answer['session_id'] == current_session_id])))
+            subjects = ",".join(list(set([answer['subject'] for answer in answers if answer['session_id'] == current_session_id])))
+            number_of_items = len([answer['subject'] for answer in answers if answer['session_id'] == current_session_id])
             session = {
                 'session_number': session_count
                 ,'session_id' : answer['session_id']
                 ,'session_date': datetime.datetime.fromtimestamp(int(answer['session_id'])).strftime("%Y-%m-%d %I:%M %p")
-                ,'subject': answer['subject']
-                ,'type': answer['type']
+                ,'subject': subjects
+                ,'type': exam_type
+                ,'number_of_items':number_of_items
             }
             session_id.append(answer['session_id'])
             session_list.append(session)
     
     # printout all the session ids and ask user to choose from the session ids 
-    print(f'\n{'Session Number':^17}{'Session Id':<15}{'Session Date':<25}{'Subject':<15}{'Type':<20}')
+    header = f'{'Session Number':^17}{'Session Id':<15}{'Session Date':<25}{'Subject':<30}{'Exam Type':<30}{'Number of Items':^15}'
+    print('-'*len(header))
+    print(header)
+    print('-'*len(header))
     for session in session_list:
-        print(f'{session['session_number']:^17}{session['session_id']:<15}{session['session_date']:<25}{session['subject']:<15}{session['type']:<20}')
+        print(f'{session['session_number']:^17}{session['session_id']:<15}{session['session_date']:<25}{session['subject']:<30}{session['type']:<30}{session['number_of_items']:^15}')
     
     # print the data from the chosen session id
     while True:
@@ -78,8 +85,7 @@ def retrieve_answers(answer_storage_file_path):
             
         except Exception as e:
             print(f'Invalid Input. Please Enter from the available session numbers only.')
-        
-        
+
 
 if __name__ == "__main__":
     retrieve_answers(u.answer_storage_file_path)

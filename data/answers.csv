@@ -17,3 +17,29 @@ session_id,id,subject,type,correct_answer,user_answer,question,is_answer_correct
 1734207781,13,cmsc 206,multiplechoice,3,3,It uniquely identifies each entity in the entity set,1
 1734207781,14,cmsc 206,true/false,F,F,Is this statement true? File system storage is a good alternative to using a DBMS,1
 1734207781,15,cmsc 206,true/false,T,T,Triggers let us embed monitoring directly into the database rather than in an external application,1
+1734209720,1,cmsc 201,multiplechoice,2,3,"What is the symbol for ""and"" in propositional logic",0
+1734209720,2,cmsc 201,multiplechoice,3,3,Given the following propositions: H: I am Happy S: I am Inlove How is the following statement represented in propositional logic: If I am happy then I am in love,1
+1734209720,3,cmsc 201,multiplechoice,1,1,Given the following propositional logic representation: ~(S -> H). What statement do you think is it most likely representing?,1
+1734209720,4,cmsc 201,true/false,F,F,"Is the following statement true for all real numbers? For every x, if x > 0, then x2 -1 > 0",1
+1734209720,5,cmsc 201,true/false,F,F,"Is the following statement true for all real numbers? For every x, if x >= 0, then x+1 > 1",1
+1734214139,3,cmsc 201,multiplechoice,1,1,Given the following propositional logic representation: ~(S -> H). What statement do you think is it most likely representing?,1
+1734214139,4,cmsc 201,true/false,F,T,"Is the following statement true for all real numbers? For every x, if x > 0, then x2 -1 > 0",0
+1734214139,9,cmsc 202,true/false,F,F,Is the following statement True or False: A syntactically correct program will produce the desired output.,1
+1734214139,12,cmsc 206,multiplechoice,1,4,What is not a DBMS from this list,0
+1734214139,15,cmsc 206,true/false,T,T,Triggers let us embed monitoring directly into the database rather than in an external application,1
+1734214139,17,cmsc 202,true/false,T,F,Programs can also be represented in a flowchart.,0
+1734214174,4,cmsc 201,true/false,F,T,"Is the following statement true for all real numbers? For every x, if x > 0, then x2 -1 > 0",0
+1734214174,5,cmsc 201,true/false,F,T,"Is the following statement true for all real numbers? For every x, if x >= 0, then x+1 > 1",0
+1734214393,1,cmsc 201,multiplechoice,2,2,"What is the symbol for ""and"" in propositional logic",1
+1734214393,2,cmsc 201,multiplechoice,3,4,Given the following propositions: H: I am Happy S: I am Inlove How is the following statement represented in propositional logic: If I am happy then I am in love,0
+1734214393,3,cmsc 201,multiplechoice,1,1,Given the following propositional logic representation: ~(S -> H). What statement do you think is it most likely representing?,1
+1734214393,4,cmsc 201,true/false,F,F,"Is the following statement true for all real numbers? For every x, if x > 0, then x2 -1 > 0",1
+1734214393,5,cmsc 201,true/false,F,T,"Is the following statement true for all real numbers? For every x, if x >= 0, then x+1 > 1",0
+1734214644,11,cmsc 206,multiplechoice,2,2,What does A in ACID mean,1
+1734214644,12,cmsc 206,multiplechoice,1,1,What is not a DBMS from this list,1
+1734214644,13,cmsc 206,multiplechoice,3,3,It uniquely identifies each entity in the entity set,1
+1734215269,11,cmsc 206,multiplechoice,2,2,What does A in ACID mean,1
+1734215269,12,cmsc 206,multiplechoice,1,1,What is not a DBMS from this list,1
+1734215269,13,cmsc 206,multiplechoice,3,1,It uniquely identifies each entity in the entity set,0
+1734215269,14,cmsc 206,true/false,F,T,Is this statement true? File system storage is a good alternative to using a DBMS,0
+1734215269,15,cmsc 206,true/false,T,F,Triggers let us embed monitoring directly into the database rather than in an external application,0

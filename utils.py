@@ -1,5 +1,5 @@
 '''
-This is a shared module that will handle functions that may be shared across modules
+This is the module that will handle functions that may be shared across modules
 
 Functions:
 1. clear_terminal: this clears the terminal to improve readability

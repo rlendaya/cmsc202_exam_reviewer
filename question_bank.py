@@ -6,18 +6,22 @@
 '''
 Function in this module:
 
+Menu function
+1. question_management_menu - this function show the main menu for the question management functions
+
 Helper functions
-1. load_data_to_lists
-2. get_index_of_questions
+2. load_data_to_lists - loads the data to the question list
+3. get_index_of_questions - gets the index of the question to assist the edit question function
 
-functions below are part of the question management
-3. view_questions
-4. add_question
-5. edit question
-6. delete question
-7. 
+functions below are part of the question management and are self-explanatory on what they do. All functions interact with files.
+4. view_questions
+5. add_question
+6. edit question
+7. delete question
 
-
+functions below are related to the exam proper
+8. review_questions_filtered - this function is to customize the exam by allowing the user to select the subject, question type, and number of questions
+9. take_exam - this function will handle the exam/review proper
 
 '''
 

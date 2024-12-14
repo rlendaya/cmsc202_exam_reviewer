@@ -2,6 +2,12 @@
 #Aleli
 #Diane Zevedy
 #Maria Lourdes
+
+'''
+This module is responsible for  
+
+
+'''
 import textwrap
 
 class PerformanceAnalysis:

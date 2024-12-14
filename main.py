@@ -30,8 +30,9 @@ def main():
             question_bank.question_management_menu()
                                 
         elif choice == "2":
-            # results = question_bank.take_exam()
-            question_bank.take_exam()
+            results = question_bank.take_exam()
+            # question_bank.take_exam()
+            
             #  ask the user if they want to save the results of their current review
             save_results = input('\nDo you want to save the results of this review? (y or n only): ')
             
@@ -48,11 +49,11 @@ def main():
                 else:
                     print(f'\nInvalid Input. Please Enter Y or N only')
 
-            # performance_analyzer.correct_count = len([r for r in results if r['result'] == 'Correct'])
-            # performance_analyzer.wrong_count = len([r for r in results if r['result'] == 'Incorrect'])
-            # performance_analyzer.results = results
-            # performance_analyzer.performance_summary()  # Show performance
-            # exam_taken = True # Will be set to true after taking the exam          
+            performance_analyzer.correct_count = len([r for r in results if r['result'] == 'Correct'])
+            performance_analyzer.wrong_count = len([r for r in results if r['result'] == 'Incorrect'])
+            performance_analyzer.results = results
+            performance_analyzer.performance_summary()  # Show performance
+            exam_taken = True # Will be set to true after taking the exam          
 
         elif choice == "3":
             if exam_taken:

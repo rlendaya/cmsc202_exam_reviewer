@@ -16,6 +16,9 @@ retrieve_answers:
 -lists the sessions available and ask the user to pick
 -displays the questions, answers and correct answers from the chosen session
 
+Functions:
+1. save_answers: this function saves the answers from the current session to the answer storage file
+2. retrieve answers: this function display the answers from the past sessions
 '''
 
 import os
@@ -119,7 +122,7 @@ def retrieve_answers(answer_storage_file_path):
             break
 
         except Exception as e:
-            print(f'Invalid Input. Please Enter from the available session numbers only. {e}')
+            print(f'Invalid Input. Please Enter from the available session numbers only.')
 
 if __name__ == "__main__":
     retrieve_answers(u.answer_storage_file_path)

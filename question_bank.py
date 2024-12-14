@@ -546,18 +546,18 @@ Select options from below:
             self.user_answers.append(self.user_answers_details_per_question)
 
             # Append result to results list
-        #     results.append({
-        #         'id': question['id'],
-        #         'question': question['question'],  # Include the question text
-        #         'user_answer': user_answer,  # Include the user's answer
-        #         'correct_answer': question['correct_answer'],  # Include the correct answer
-        #         'result': 'Correct' if user_answer == question['correct_answer'] else 'Incorrect'
-        #     })
+            results.append({
+                'id': question['id'],
+                'question': question['question'],  # Include the question text
+                'user_answer': user_answer,  # Include the user's answer
+                'correct_answer': question['correct_answer'],  # Include the correct answer
+                'result': 'Correct' if user_answer == question['correct_answer'] else 'Incorrect'
+            })
         
 
-        # print(f"\nYour score: {score}/{len(self.filtered_question_list)}")
-        # input(f'\nPress Enter to continue...')
-        # return results
+        print(f"\nYour score: {score}/{len(self.filtered_question_list)}")
+        input(f'\nPress Enter to continue...')
+        return results
 
 def main():
     

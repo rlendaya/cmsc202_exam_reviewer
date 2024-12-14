@@ -1,10 +1,11 @@
 '''
 This is a shared module that will handle functions that may be shared across modules
 
-Function:
+Functions:
 1. clear_terminal: this clears the terminal to improve readability
 2. unique_id: this creates a unique integer id using time since epoch
-3. 
+3. load_file: this loads the file and captures the row data and appropriate headers
+4. save_file: this saves the file as csv
 
 '''
 

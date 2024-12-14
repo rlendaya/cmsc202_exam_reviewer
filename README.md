@@ -14,4 +14,9 @@ Exam Reviewer Specifications:
 4. Get input from users on answers to each question
 5. Ability to save user's answers for future reference
 6. Performance analysis of students by computation of scores based on answers
-7. Customization of review session by selecting topics or setting time limits
+7. Customization of review session by selecting topics
+
+**How to Use:**
+
+**1. Run main.py and follow the instructions**
+

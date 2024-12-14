@@ -89,13 +89,19 @@ def retrieve_answers(answer_storage_file_path):
             count = 0
             
             u.clear_terminal()
-            print(f'\n{'No.':<{no_width}}{'Subject':<{subject_width}}{'Question':<{question_width}}{'Your Answer':^{answer_width}}{'Correct answer':^{answer_width}}')
+            print(f'\n{'No.':<{no_width}}{'Subject':<{subject_width}}{'Question':<{question_width}}{'Your Answer':^{answer_width}}{'Correct answer':^{answer_width}}{'Result':^{answer_width}}')
             
             # loop to print the results from the previous exams
             for answer in answers:
                 # check if session id is in the list
                 if answer['session_id'] == session_id_selected:
                     count+=1
+
+                    # check for correctness of answer
+                    if answer['user_answer'] == answer['correct_answer']:
+                        is_answer_correct = 'Correct'
+                    else:
+                        is_answer_correct = 'Incorrect'
                     
                     # wrap the questions that are too long to be displayes
                     formatted_question_text = textwrap.wrap(answer['question'],70,subsequent_indent=' '*(subject_width+no_width))
@@ -104,7 +110,7 @@ def retrieve_answers(answer_storage_file_path):
                     spaces_to_add = question_width-len(formatted_question_text[0])
                     
                     # enter the first line text
-                    print(f'\n{count:<{no_width}}{answer['subject']:<{subject_width}}{formatted_question_text[0]+' '*spaces_to_add}{answer['user_answer']:^{answer_width}}{answer['correct_answer']:^{answer_width}}')
+                    print(f'\n{count:<{no_width}}{answer['subject']:<{subject_width}}{formatted_question_text[0]+' '*spaces_to_add}{answer['user_answer']:^{answer_width}}{answer['correct_answer']:^{answer_width}}{is_answer_correct:^{answer_width}}')
                     # enter the succeeding lines that are over the wrap limit
                     for line in range(1,len(formatted_question_text)):
                         print(f'{formatted_question_text[line]}')

@@ -30,14 +30,14 @@ def main():
             question_bank.question_management_menu()
                                 
         elif choice == "2":
-            results = question_bank.take_exam()
-            
+            # results = question_bank.take_exam()
+            question_bank.take_exam()
             #  ask the user if they want to save the results of their current review
             save_results = input('\nDo you want to save the results of this review? (y or n only): ')
             
             while True:
                 if save_results.lower() == 'y':
-                    ans.save_answers(question_bank.user_answers,u.answer_storage_file_path)
+                    ans.save_answers(question_bank.user_answers)
                     print(f'\nAnswers are now saved in {u.answer_storage_file_path} file.')
                     input('\nPress Enter to continue...')
                     break
@@ -47,7 +47,6 @@ def main():
                     break
                 else:
                     print(f'\nInvalid Input. Please Enter Y or N only')
-
 
             # performance_analyzer.correct_count = len([r for r in results if r['result'] == 'Correct'])
             # performance_analyzer.wrong_count = len([r for r in results if r['result'] == 'Incorrect'])
@@ -64,7 +63,7 @@ def main():
         elif choice == "4":
             customization.customize_questions()
         elif choice == "5":
-            answer_storage.retrieve_answers(u.answer_storage_file_path)
+            ans.retrieve_answers(u.answer_storage_file_path)
         elif choice == "6":
             print("Exiting... Goodbye!")
             break

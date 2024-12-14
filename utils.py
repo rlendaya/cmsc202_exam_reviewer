@@ -15,7 +15,7 @@ import csv
 
 # initialize file paths variables
 question_bank_file_path = os.path.join("data",'questionSamples.csv')
-answer_storage_file_path = os.path.join("data",'answers.txt')
+answer_storage_file_path = os.path.join("data",'answers.csv')
 
 # function that will clear the terminal based on user's operating system
 def clear_terminal():
@@ -44,11 +44,12 @@ def load_file(filepath):
             print(f"An error occurred while loading questions: {e}")
             
 # function to save files
-def save_file(file_path,data_to_be_saved,headers):
+def save_file(file_path,data_to_be_saved,headers,write_mode,include_headers=True):
         try:
-            with open(file_path, 'w') as file:
+            with open(file_path, write_mode) as file:
                 writer = csv.DictWriter(file, fieldnames=headers)     
-                writer.writeheader()
+                if include_headers == True:
+                    writer.writeheader()
                 writer.writerows(data_to_be_saved)
         
         except Exception as e:

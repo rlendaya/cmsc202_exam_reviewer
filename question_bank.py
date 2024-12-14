@@ -157,7 +157,7 @@ class QuestionBank:
         # if user confirms, append to current question list and save to file. Otherwise, advice user that question is not saved
         if add_new_question_to_file.lower() == 'y':
             self.questions.append(new_question)
-            utils.save_file(utils.question_bank_file_path,self.questions,self.headers)
+            utils.save_file(utils.question_bank_file_path,self.questions,self.headers,'w')
             print(f'Changes are now saved to file {utils.question_bank_file_path}')
             # reload question from file to ensure initialized list variables are updated
             self.load_data_to_lists()
@@ -187,7 +187,7 @@ class QuestionBank:
                 confirm_delete = input('\nAre you sure you want to delete the question above? (y|n) ')              
                 if confirm_delete.lower() == 'y':
                     del self.questions[self.index_of_question]
-                    utils.save_file(utils.question_bank_file_path,self.questions,self.headers)
+                    utils.save_file(utils.question_bank_file_path,self.questions,self.headers,'w')
                     print(f'\nChanges are now saved to file {utils.question_bank_file_path}')
                     self.load_data_to_lists()
                     break
@@ -283,8 +283,8 @@ class QuestionBank:
                         save_new_values_to_dict = input('\nDo you with to save these new values? ( y|n only ) ')
                         if save_new_values_to_dict.lower() == 'y':
                             self.questions[self.index_of_question] = self.dict_to_edit
-                            utils.save_file(utils.question_bank_file_path,self.questions,self.headers)
-                            print(f'Changes are now saved to {utils.question_bank_file_path}')
+                            utils.save_file(utils.question_bank_file_path,self.questions,self.headers,'w')
+                            print(f'\nChanges are now saved to {utils.question_bank_file_path}')
                             self.load_data_to_lists()
                             break
                         elif save_new_values_to_dict == 'n':
@@ -292,6 +292,8 @@ class QuestionBank:
                             break
                         else:
                             print('Wrong input. Enter y or n only.')
+                    
+                    break
                 
                 except Exception as e:
                     print(f'\nInvalid Input. Enter the correct question ID... {e}')
@@ -453,6 +455,9 @@ Select options from below:
 
     # function to conduct the exam review
     def take_exam(self):
+        # load the questions in the list
+        self.load_data_to_lists()
+        
         # call the review questions filtering function
         self.review_questions_filtered()
         input('\nFilters have been applied. Press Enter to start the exam reviewer..\n')
@@ -474,28 +479,12 @@ Select options from below:
             print(f"Subject: {question['subject']}")
             print(f"Type: {question['type']}\n")
             print(f"Question: {question['question']}\n")
-            
+               
             # Show answer choices for multiple choice questions
             if question['type'].lower() == 'multiplechoice':
                 for i in range(1, 5):
                     print(f"{i}. {question[f'answer_choice_{i}']}")
-                
-                '''
-                '''
-                # Handle correct answer being a letter or number for multiple choice questions
-                correct_answer = question["correct_answer"]
-                try:
-                    # Try to convert the correct answer to an integer
-                    correct_index = int(correct_answer) - 1  # Convert to 0-based index
-                except ValueError:
-                    # If it's not a number, treat it as a letter corresponding to the answer choices
-                    choices = [question[f'answer_choice_{i}'] for i in range(1, 5)]
-                    correct_index = choices.index(correct_answer)  # Find the correct answer index
-                '''
-                
-                '''
-                
-                
+                     
                 # Get the user's response
                 while True:
                     try:
@@ -510,19 +499,8 @@ Select options from below:
                                 print(f'\nYour answer is wrong. Correct answer is {question['correct_answer']}')
                                 input('\nPress Enter to continue...')
                                 break
-                        user_answer = int(input(f"\nEnter your answer (1-4): "))
-                        if 1 <= user_answer <= 4:
-                            if user_answer == int(question['correct_answer']):
-                                score += 1
-                                print(f'\nGood job! You got the correct answer.')
-                                input('\nPress Enter to continue...')
-                                break
-                            else:
-                                print(f'\nYour answer is wrong. Correct answer is {question['correct_answer']}')
-                                input('\nPress Enter to continue...')
-                                break
                         else:
-                            print("Please enter a number between 1 and 4.")
+                            print("\nInvalid input. Please enter a number between 1 and 4.")
                     except ValueError:
                         print("Invalid input. Please enter a number between 1 and 4.")
             
@@ -546,51 +524,40 @@ Select options from below:
                                 print(f'\nYour answer is wrong. Correct answer is {question['correct_answer']}')
                                 input('\nPress Enter to continue...')
                                 break
-                        # get user input for the correct answer
-                        user_answer = input("Enter your answer (T for true, F for false): ")
-                        # check if user's answer is within allowable values
-                        if user_answer.lower() in ['t','f']:
-                        # Check Answer
-                            if user_answer.capitalize() == question['correct_answer']:
-                                score += 1
-                                print(f'\nGood job! You got the correct answer.')
-                                input('\nPress Enter to continue...')
-                                break
-                            else:
-                                print(f'\nYour answer is wrong. Correct answer is {question['correct_answer']}')
-                                input('\nPress Enter to continue...')
-                                break
                         else:
                             print("Invalid input. Please enter T or F only!")
-                            print("Invalid input. Please enter T or F only!")
+                            
                     except ValueError:
                         print("Invalid input. Please enter T or F only!")
 
             # store the user's answers to a dictionary
-            self.user_answers_details_per_question['session_id'] = session_id
-            self.user_answers_details_per_question['id'] = question['id']
-            self.user_answers_details_per_question['subject'] = question['subject']
-            self.user_answers_details_per_question['type'] = question['type']
-            self.user_answers_details_per_question['correct_answer'] = question['correct_answer']
-            self.user_answers_details_per_question['user_answer'] = user_answer
-            self.user_answers_details_per_question['question'] = question['question']
+            self.user_answers_details_per_question = {
+                
+                'session_id' : session_id,
+                'id' : question['id'],
+                'subject' : question['subject'],
+                'type' : question['type'],
+                'correct_answer' : question['correct_answer'],
+                'user_answer' : user_answer,
+                'question' : question['question']
+            }
             
             # append the dictionary of this question to a list of exam answers.
             self.user_answers.append(self.user_answers_details_per_question)
 
             # Append result to results list
-            results.append({
-                'id': question['id'],
-                'question': question['question'],  # Include the question text
-                'user_answer': user_answer,  # Include the user's answer
-                'correct_answer': question['correct_answer'],  # Include the correct answer
-                'result': 'Correct' if user_answer == question['correct_answer'] else 'Incorrect'
-            })
+        #     results.append({
+        #         'id': question['id'],
+        #         'question': question['question'],  # Include the question text
+        #         'user_answer': user_answer,  # Include the user's answer
+        #         'correct_answer': question['correct_answer'],  # Include the correct answer
+        #         'result': 'Correct' if user_answer == question['correct_answer'] else 'Incorrect'
+        #     })
         
 
-        print(f"\nYour score: {score}/{len(self.filtered_question_list)}")
-        input(f'\nPress Enter to continue...')
-        return results
+        # print(f"\nYour score: {score}/{len(self.filtered_question_list)}")
+        # input(f'\nPress Enter to continue...')
+        # return results
 
 def main():
     

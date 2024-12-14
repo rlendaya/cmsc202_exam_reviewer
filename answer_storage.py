@@ -18,217 +18,102 @@ retrieve_answers:
 
 '''
 
-
-# removed OOP for now for fine tuning, please feel free to convert if needed
-#class AnswerStorage:
-    #def __init__(self):
-        #self.answers = {}  # Store user answers, key=question ID and value=answer
-        #self.file_name = "answer_storage.txt"
-
-#     (question['id'], question['question'], question['correct_answer'], user_answer)
-
-
 import os
 import utils as u
-import question_bank
+import datetime
+import textwrap
 
-''''
-def save_answers expected input: a list of dictionaries with the following info: 
-[
-{session_id:'session_id', question_id: 'question_id, subject: 'subject', type: 'type', correct_answer: correct_answer, user_answer: 'user_answer', question: 'question text'
-]
-
-sample:
-[{'session_id': 1734082085, 'id': '13', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 3, 'question': 'It uniquely identifies each entity in the entity set'}, 
-{'session_id': 1734082385, 'id': '12', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 3, 'question': 'It is the number of vertices in a graph.'}, 
-{'session_id': 1734082185, 'id': '19', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 4, 'question': 'It is the number of edges in a graph.'}]
-
-'''
-
-def save_answers(answers,answer_storage_file_path):
-    # current_session_id = None
+def save_answers(answers): 
     
-    # 
     print(answers)
-
-    '''
-    # Open the file where answer data will be stored
-    with open(answer_storage_file_path, 'a') as file: 
-
-        # Parse and format answers in answer_data list
-        for dictionary in file:
-            keys = list(dictionary.keys())
-
-            session_id = dictionary[keys[0]]
-            question_id = dictionary[keys[1]]
-            subject = dictionary[keys[2]]
-            question_text = dictionary[keys[6]]
-            user_answer = dictionary[keys[5]]
-            correct_answer = dictionary[keys[4]]
-            is_correct = (str(user_answer).lower() == str(correct_answer).lower()) # Checks correctness of user answer
-
-            # Ends the session and starts session if new session available
-            if session_id != current_session_id:
-                if current_session_id is not None:
-                    file.write("######### End of Session #########\n\n\n") # End of session
-
-                # Header as the session date
-                file.write(f"Session ID: {session_id}\n")
-                file.write("========================\n")
-                current_session_id = session_id
-
-            # Write question details in file
-            file.write(f"Question ID: {question_id}\n")            
-            file.write(f"Subject: {subject}\n")
-            file.write(f"Question: {question_text}\n")
-            file.write(f"Correct Answer: {correct_answer}\n")
-            file.write(f"User Answer: {user_answer}\n")
-            file.write(f"Is Correct: {is_correct}\n\n") # create an empty line in between questions
-        
-        # End session
-        file.write("######### End of Session #########\n\n\n")
-    '''
-
-    '''
-    Session ID: 1734082085
-    =========================
-    Question ID: 8
-    Subject: CMSC 202
-    Question: What is 2+2?
-    Correct Answer: 4
-    User Answer: 4
-    Is Correct: True
-
-    Question ID: 3
-    Subject: CMSC 201
-    Question: Is a set unordered?
-    Correct Answer: True
-    User Answer: False
-    Is Correct: False
-
-    ######### End of Session #########
-
+    # get the headers from the first dictionary in the list
+    headers = answers[0].keys()
     
-    Session Date: 1734082086
-    ========================
-    Question ID: 1
-    Subject: CMSC 202
-    Question: "What is 2+6?"
-    Correct Answer: 4
-    User Answer: 4
-    Is Correct: False
-
-    ######### End of Session #########
-    '''
+    # check if file already has a header
+    existing_headers = u.load_file(u.answer_storage_file_path)[1]
+    
+    # if no header, include header in the append
+    if not existing_headers:
+        u.save_file(u.answer_storage_file_path,answers,headers,'a')
+    
+    # exclude header in append if it already exists
+    else:   
+        u.save_file(u.answer_storage_file_path,answers,headers,'a',False)
 
 
 def retrieve_answers(answer_storage_file_path):
-        
-    review_session = input("Do you want to review previous study sessions? Type 'yes' or 'no'\n")
-
-    if review_session.lower() == "yes":
-        # Check first if file exists
-        if not os.path.exists(answer_storage_file_path):
-            print("No study sessions available yet.")
-            return # Return to main menu
-
-        sessions = []  # List of all sessions available
-
-        # Read through file containing sessions
-        with open(answer_storage_file_path, "r") as file:
-            lines = file.readlines()
-
-            # Get available sessions
-            for line in lines:
-                line = line.strip() # Remove leading/trailing spaces
-                if line.startswith("Session ID:"):
-                    session_id = line.split(": ")[1]
-                    sessions.append(session_id)
-        
-        # Check that file has session/s
-        if not sessions:
-            print("No study sessions available yet.")
-            return # Return to main menu
-        
-
-        # Ask user to choose study session from list:
-        try:
-            print("\nSelect a session number to view questions and answers, or 0 to go back to main menu")
-            # Show available sessions
-            print("Available Study Sessions: \n")
-            print("0. Go back to Main Menu")
-            for idx, session in enumerate(sessions):
-                print(f"{idx + 1}. Session: {session}")
-            
-            choice = int(input("\nNumber: "))
-            print("")
-            if choice == 0:
-                return # Return to Main Menu
-            elif 1 <= choice <= len(sessions):
-                current_session = sessions[choice - 1]
-
-                # Display data of chosen session
-                session_found = False
-                for line in lines:
-                    line = line.strip()
-                    if line.startswith(f"Session ID: {current_session}"):
-                        session_found = True # Flags session beginning
-                    if session_found:
-                        print(line) # Print subsequent lines of the chosen session
-                    if line == "#### End of Session ####":
-                        session_found = False # Reset flag
-                        break # Stop loop
-            
-            else:
-                print("Invalid input. Please input a valid session number.")
-        
-        except ValueError:
-            print("Invalid input. Please input a number.")
     
-    else:
-        print()
-        print("Great. We'll return to the main menu.") # Handles if the user chooses 'no'
-
+    # read the saved answers from the csv file (answer.csv)
+    answers = u.load_file(u.answer_storage_file_path)[0]
+    headers = u.load_file(u.answer_storage_file_path)[1]
+    
+    # initalize the dictionary where the filtered values will be stored
+    session_list = []
+    session_id = []
+    session_count = 0
+    
         
+    # show user all the unique review sessions
+    for answer in answers:        
+        if answer['session_id'] not in session_id:
+            session_count += 1
+            session = {
+                'session_number': session_count
+                ,'session_id' : answer['session_id']
+                ,'session_date': datetime.datetime.fromtimestamp(int(answer['session_id'])).strftime("%Y-%m-%d %I:%M %p")
+                ,'subject': answer['subject']
+                ,'type': answer['type']         
+            }
+            session_id.append(answer['session_id'])
+            session_list.append(session)
 
+    # printout all the session ids and ask user to choose from the session ids 
+    print(f'\n{'Session Number':^17}{'Session Id':<15}{'Session Date':<25}{'Subject':<15}{'Type':<15}')
+    for session in session_list:
+        print(f'{session['session_number']:<17}{session['session_id']:<15}{session['session_date']:<25}{session['subject']:<15}{session['type']:<15}')
+          
+    # print the data from the chosen session id
+    while True:
+        session_number =[int(session['session_number']) for session in session_list]
+        choose_session = input(f'\nSelect session number that you want to view: ')
+        try:
+            
+            # initialize variable for text alignment
+            session_id_selected = session_list[int(choose_session)-1]['session_id']
+            
+            # initialize variables for textwrapping
+            no_width = 5
+            subject_width = 10
+            question_width = 70
+            answer_width = 15
+            count = 0
+            
+            u.clear_terminal()
+            print(f'\n{'No.':<{no_width}}{'Subject':<{subject_width}}{'Question':<{question_width}}{'Your Answer':^{answer_width}}{'Correct answer':^{answer_width}}')
+            
+            # loop to print the results from the previous exams
+            for answer in answers:
+                # check if session id is in the list
+                if answer['session_id'] == session_id_selected:
+                    count+=1
+                    
+                    # wrap the questions that are too long to be displayes
+                    formatted_question_text = textwrap.wrap(answer['question'],70,subsequent_indent=' '*(subject_width+no_width))
+                    
+                    # compute the needed space to add for consistent table formatting.
+                    spaces_to_add = question_width-len(formatted_question_text[0])
+                    
+                    # enter the first line text
+                    print(f'\n{count:<{no_width}}{answer['subject']:<{subject_width}}{formatted_question_text[0]+' '*spaces_to_add}{answer['user_answer']:^{answer_width}}{answer['correct_answer']:^{answer_width}}')
+                    # enter the succeeding lines that are over the wrap limit
+                    for line in range(1,len(formatted_question_text)):
+                        print(f'{formatted_question_text[line]}')
+                
+            input('\nPress Enter to continue...')
+            break
 
-
-####################### TEST RUN #########################
-
-# def test_main_menu():
-#     while True:
-#         print("\nMAIN MENU")
-#         print("1. View Previous Sessions")
-#         print("5. Exit\n")
-
-#         choice = input("Please choose a number from the main menu: ")
-#         print("")
-
-
-#         if choice == "1":
-#             retrieve_answers(file_path)
-#         elif choice == "5":
-#             print("Exiting... Goodbye!")
-#             break
-#         else:
-#             print("Incorrect input. Please choose agaian.")
-
-
-
-# test_answer_data1 = [{'session_id': 1734082085, 'id': '13', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 3, 'question': 'It uniquely identifies each entity in the entity set'}, 
-# {'session_id': 1734082085, 'id': '12', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 3, 'question': 'It is the number of vertices in a graph.'}, 
-# {'session_id': 1734082085, 'id': '19', 'subject': 'cmsc 206', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 4, 'question': 'It is the number of edges in a graph.'}]
-
-# test_answer_data2 = [{'session_id': 1734082086, 'id': '14', 'subject': 'cmsc 203', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 3, 'question': 'It uniquely identifies each entity in the entity set'}, 
-# {'session_id': 1734082086, 'id': '13', 'subject': 'cmsc 201', 'type': 'T/F', 'correct_answer': 't', 'user_answer': 'F', 'question': 'Order is the number of vertices in a graph.'}, 
-# {'session_id': 1734082086, 'id': '20', 'subject': 'cmsc 202', 'type': 'multiplechoice', 'correct_answer': '3', 'user_answer': 4, 'question': 'It is the number of edges in a graph.'}]
-
-# save_answers(test_answer_data1) # creates answers.txt file that saves the answers 
-
-# save_answers(test_answer_data2)
-
-# test_main_menu()
-
+        except Exception as e:
+            print(f'Invalid Input. Please Enter from the available session numbers only. {e}')
 
 if __name__ == "__main__":
     retrieve_answers(u.answer_storage_file_path)

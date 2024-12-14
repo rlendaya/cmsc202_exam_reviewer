@@ -20,9 +20,17 @@ This question bank module will handle the following:
     - display the questions
     - gather answer from user
     - check answer for correctness
+    
+Function in this module:
+1. load_data_to_lists
+2. get_index_of_questions
+
+Modules below are part of the question management 
+3. view_questions
+4. add_questions
+5.
 '''
 
-import csv
 import random
 import utils
 

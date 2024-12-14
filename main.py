@@ -1,6 +1,5 @@
 #This part is the Feature selection
 from question_bank import QuestionBank
-# from answer_storage import AnswerStorage
 from performance_analysis import PerformanceAnalysis
 from customization import Customization
 import answer_storage as ans
@@ -20,9 +19,9 @@ def main():
         print("1. Question Management")
         print("2. Take Exam")
         print("3. View Performance")
-        print("4. Customize Settings")
-        print("5. Review Previous Study Sessions")
-        print("6. Exit\n")
+        # print("4. Customize Settings")
+        print("4. Review Previous Study Sessions")
+        print("5. Exit\n")
         choice = input("Enter your choice: ")
 
         # run question_bank module when choice is 1
@@ -61,11 +60,11 @@ def main():
             else:
                print("\nYou need to take an exam first before viewing your performance!")
                input("Press Enter to return to the main menu...") 
+        # elif choice == "4":
+        #     customization.customize_questions()
         elif choice == "4":
-            customization.customize_questions()
-        elif choice == "5":
             ans.retrieve_answers(u.answer_storage_file_path)
-        elif choice == "6":
+        elif choice == "5":
             print("Exiting... Goodbye!")
             break
         

@@ -16,7 +16,7 @@ retrieve_answers:
 -lists the sessions available and ask the user to pick
 -displays the questions, answers and correct answers from the chosen session
 
-Functions:
+Functions in this module:
 1. save_answers: this function saves the answers from the current session to the answer storage file
 2. retrieve answers: this function display the answers from the past sessions
 '''
@@ -106,7 +106,7 @@ def retrieve_answers(answer_storage_file_path):
                     else:
                         is_answer_correct = 'Incorrect'
                     
-                    # wrap the questions that are too long to be displayes
+                    # wrap the questions that are too long to be displayed
                     formatted_question_text = textwrap.wrap(answer['question'],70,subsequent_indent=' '*(subject_width+no_width))
                     
                     # compute the needed space to add for consistent table formatting.

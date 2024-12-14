@@ -334,10 +334,10 @@ class QuestionBank:
         self.load_data_to_lists()
     
         utils.clear_terminal()
-        print('You are now in the Question Management Menu. You can view, edit, delete, and add questions here.')
         
         while True:
             utils.clear_terminal()
+            print('You are now in the Question Management Menu. You can view, edit, delete, and add questions here.')
             questionManagementchoice = input('''
 Select options from below: 
 (1) View All Questions

@@ -7,7 +7,7 @@
 This module is responsible for displaying the results of the exam 
 
 Functions in this module:
-1. PerformanceAnalysis - this compute the results and display in tabular format the answer per question
+1. PerformanceAnalysis: this computes the results and displays in tabular format the answer per question
 
 '''
 import textwrap

@@ -43,3 +43,11 @@ session_id,id,subject,type,correct_answer,user_answer,question,is_answer_correct
 1734215269,13,cmsc 206,multiplechoice,3,1,It uniquely identifies each entity in the entity set,0
 1734215269,14,cmsc 206,true/false,F,T,Is this statement true? File system storage is a good alternative to using a DBMS,0
 1734215269,15,cmsc 206,true/false,T,F,Triggers let us embed monitoring directly into the database rather than in an external application,0
+1734243428,11,cmsc 206,multiplechoice,2,1,What does A in ACID mean,0
+1734243428,12,cmsc 206,multiplechoice,1,1,What is not a DBMS from this list,1
+1734243428,13,cmsc 206,multiplechoice,3,3,It uniquely identifies each entity in the entity set,1
+1734243428,14,cmsc 206,true/false,F,F,Is this statement true? File system storage is a good alternative to using a DBMS,1
+1734243428,15,cmsc 206,true/false,T,T,Triggers let us embed monitoring directly into the database rather than in an external application,1
+1734276763,12,cmsc 206,multiplechoice,1,1,What is not a DBMS from this list,1
+1734276763,13,cmsc 206,multiplechoice,3,3,It uniquely identifies each entity in the entity set,1
+1734276763,14,cmsc 206,true/false,F,F,Is this statement true? File system storage is a good alternative to using a DBMS,1

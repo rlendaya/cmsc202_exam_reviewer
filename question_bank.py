@@ -4,14 +4,14 @@
 #Jade Carl``
 
 '''
-Function in this module:
+Functions in this module:
 
 Menu function
-1. question_management_menu - this function show the main menu for the question management functions
+1. question_management_menu: this function shows the main menu for the question management functions
 
 Helper functions
-2. load_data_to_lists - loads the data to the question list
-3. get_index_of_questions - gets the index of the question to assist the edit question function
+2. load_data_to_lists: loads the data to the question list
+3. get_index_of_questions :gets the index of the question to assist the edit question function
 
 functions below are part of the question management and are self-explanatory on what they do. All functions interact with files.
 4. view_questions
@@ -19,9 +19,9 @@ functions below are part of the question management and are self-explanatory on 
 6. edit question
 7. delete question
 
-functions below are related to the exam proper
-8. review_questions_filtered - this function is to customize the exam by allowing the user to select the subject, question type, and number of questions
-9. take_exam - this function will handle the exam/review proper
+functions below are related to the review proper
+8. review_questions_filtered: this function is to customize the exam by allowing the user to select the subject, question type, and number of questions
+9. take_exam: this function will handle the exam/review proper
 
 '''
 
@@ -169,7 +169,7 @@ class QuestionBank:
                 print(f'{key}: {value}')
         
         # ask the user if they want they question to be saved
-        add_new_question_to_file = input('\nDo you wish to permanently add this question to the question bank? (y/n): ')
+        add_new_question_to_file = input('\nDo you wish to permanently add this question to the question bank? (y or n only): ')
         
         # if user confirms, append to current question list and save to file. Otherwise, advice user that question is not saved
         if add_new_question_to_file.lower() == 'y':
@@ -201,7 +201,7 @@ class QuestionBank:
                     print(f'{key}: {value}')
                 
                 # confirm with user if they want to proceed with deletion of question
-                confirm_delete = input('\nAre you sure you want to delete the question above? (y|n) ')              
+                confirm_delete = input('\nAre you sure you want to delete the question above? (y or n only) ')              
                 if confirm_delete.lower() == 'y':
                     del self.questions[self.index_of_question]
                     utils.save_file(utils.question_bank_file_path,self.questions,self.headers,'w')
@@ -399,17 +399,21 @@ Select options from below:
         self.subjects_available[subject_number] = 'All Subjects'
          
         print('\nWelcome to the exam reviewer!')
-        print('\nLet\'s setup some of the review settings before we start.\n ')
+        print('\nLet\'s setup some of the review settings before we start.')
+        input('\nPress Enter to continue... ')
         
-        # filter user input for available subjects and question type
-        print('Filter questions by topic. Only the subjects below are available:\n')
-        # display the available subject selection
-        for key,value in self.subjects_available.items():
-            print(f'({key}) {value}')
+       
             
         
         # loop to get user input to choose subjects
         while True:
+            utils.clear_terminal()
+             # filter user input for available subjects and question type
+            print('Filter questions by topic. Only the subjects below are available:\n')
+            # display the available subject selection
+            for key,value in self.subjects_available.items():
+                print(f'({key}) {value}')
+            
             subject_response = input('\nEnter (number) of preferred topic. ')
             # if user input is not in the available option, ask for another
             try:
@@ -417,7 +421,8 @@ Select options from below:
                     subject_chosen = self.subjects_available[int(subject_response)]
                     break
             except:
-                print('\nInvalid Input. Select from the available options only.')
+                print('\nInvalid Input. Select from the available options only.\nPress Enter to continue...')
+                input()
                 
         # loop to get user input to choose question type
         while True:
@@ -436,7 +441,8 @@ Select options from below:
                 break
             
             else:
-                print('\nInvalid Input. Select from the available options only.')
+                print('\nInvalid Input. Select from the available options only.\nPress Enter to continue...')
+                input()
             
         # get the initial list of questions based on user input for 2 filters. these filters will be applied sequentially. 
         # After application of these filters, apply question count filter

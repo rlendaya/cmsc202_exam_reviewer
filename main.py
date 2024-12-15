@@ -53,7 +53,7 @@ def main():
                     input('\nPress Enter to continue...')
                     break
                 else:
-                    print(f'\nInvalid Input. Please Enter Y or N only')
+                    print(f'\nInvalid Input. Please Enter y or n only')
 
         elif choice == "3":
             u.clear_terminal()

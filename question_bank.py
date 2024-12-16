@@ -533,7 +533,7 @@ Select options from below:
                                 break
                             else:
                                 is_answer_correct = 0
-                                print(f'\nYour answer is wrong. Correct answer is {question['correct_answer']}')
+                                print(f'\nYour answer is wrong. Correct answer is {question["correct_answer"]}')
                                 input('\nPress Enter to continue...')
                                 break
                         else:
@@ -552,7 +552,7 @@ Select options from below:
                         # check if user's answer is within allowable values
                         if user_answer.lower() in ['t','f']:
                         # Check Answer
-                            if user_answer.capitalize() == question['correct_answer']:
+                            if user_answer.capitalize() == question["correct_answer"]:
                                 score += 1
                                 is_answer_correct = 1
                                 print(f'\nGood job! You got the correct answer.')
@@ -560,7 +560,7 @@ Select options from below:
                                 break
                             else:
                                 is_answer_correct = 0
-                                print(f'\nYour answer is wrong. Correct answer is {question['correct_answer']}')
+                                print(f'\nYour answer is wrong. Correct answer is {question["correct_answer"]}')
                                 input('\nPress Enter to continue...')
                                 break
                         else:

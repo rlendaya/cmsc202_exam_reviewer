@@ -86,7 +86,7 @@ class QuestionBank:
                 formatted_question = textwrap.wrap(question['question'],70)
                 print(f'{count:<{no_width}}{question["subject"]:<{subject_width}}{question["type"]:<{type_width}}{formatted_question[0]:<{question_width}}')
                 for line in formatted_question[1:]:
-                    print(f'{' '*35}{line}')
+                    print(f'{" "*35}{line}')
     
         else:
             # print question headers

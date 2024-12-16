@@ -65,7 +65,7 @@ def retrieve_answers(answer_storage_file_path):
     print(header)
     print('-'*len(header))
     for session in session_list:
-        print(f'')
+       print(f'{session["session_number"]:^17}{session["session_id"]:<15}{session["session_date"]:<25}{session["subject"]:<30}{session["type"]:<30}{session["number_of_items"]:^15}')
     
     # print the data from the chosen session id
     while True:

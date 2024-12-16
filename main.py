@@ -38,11 +38,12 @@ def main():
             # call the performance analyzer for better display of results
             performance_analyzer.performance_summary(question_bank.user_answers)
             
-            #  ask the user if they want to save the results of their current review
-            save_results = input('\nDo you want to save the results of this review? (y or n only): ')
+            
             
             # process user input on saving of results
             while True:
+                #  ask the user if they want to save the results of their current review
+                save_results = input('\nDo you want to save the results of this review? (y or n only): ')
                 if save_results.lower() == 'y':
                     ans.save_answers(question_bank.user_answers)
                     print(f'\nAnswers are now saved in {u.answer_storage_file_path} file.')

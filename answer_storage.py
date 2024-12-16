@@ -60,12 +60,12 @@ def retrieve_answers(answer_storage_file_path):
             session_list.append(session)
     
     # printout all the session ids and ask user to choose from the session ids 
-    header = f'{'Session Number':^17}{'Session Id':<15}{'Session Date':<25}{'Subject':<30}{'Exam Type':<30}{'Number of Items':^15}'
+    header = f'{"Session Number":^17}{"Session Id":<15}{"Session Date":<25}{"Subject":<30}{"Exam Type":<30}{"Number of Items":^15}'
     print('-'*len(header))
     print(header)
     print('-'*len(header))
     for session in session_list:
-        print(f'{session['session_number']:^17}{session['session_id']:<15}{session['session_date']:<25}{session['subject']:<30}{session['type']:<30}{session['number_of_items']:^15}')
+        print(f'')
     
     # print the data from the chosen session id
     while True:

@@ -84,7 +84,7 @@ class QuestionBank:
             for question in self.questions:
                 count += 1
                 formatted_question = textwrap.wrap(question['question'],70)
-                print(f'{count:<{no_width}}{question["subject"]:<{subject_width}}{question['type']:<{type_width}}{formatted_question[0]:<{question_width}}')
+                print(f'{count:<{no_width}}{question["subject"]:<{subject_width}}{question["type"]:<{type_width}}{formatted_question[0]:<{question_width}}')
                 for line in formatted_question[1:]:
                     print(f'{' '*35}{line}')
     
@@ -96,9 +96,9 @@ class QuestionBank:
             print('-'*len(header))
             for question in self.questions:
                 formatted_question = textwrap.wrap(question['question'],70)
-                print(f'{question["id"]:<{no_width}}{question["subject"]:<{subject_width}}{question['type']:<{type_width}}{formatted_question[0]:<{question_width}}')
+                print(f'{question["id"]:<{no_width}}{question["subject"]:<{subject_width}}{question["type"]:<{type_width}}{formatted_question[0]:<{question_width}}')
                 for line in formatted_question[1:]:
-                    print(f'{' '*35}{line}')
+                    print(f'{" "*35}{line}')
 
     # function to add questions to the question bank
     def add_question(self):

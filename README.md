@@ -1,4 +1,5 @@
-# cmsc202_exam_reviewer
+# Group 2 CMSC 202 1st Sem 2024 - 2025
+
 CMSC 202 Exam Reviewer Project
 
 This is the github page for the Exam Reviewer Project of 1st Semester '24-'25 CMSC 202 Group 2.
